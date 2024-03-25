@@ -1,0 +1,66 @@
+{
+    // name of spider
+    "name": "xx_xxx_xx",
+    // version, a increasing number
+    "version": "n",
+    // variables the spider uses, use "$(name)" to reference variables
+    "environment": ["a", "b", "c"],
+    // engine settings
+    "engine": {
+        // keep cookies
+        "cookie": true,
+        // enable auto-redirect
+        "redirect": false
+    },
+    // steps in sequence
+    "task": [
+        {
+            "name": "xx_xxx_xx",
+            // support variables
+            "url": "",
+            // POST, GET
+            "method": "POST",
+            // http request
+            "payload": {
+                // content-type: text, json, form
+                "type": "text",
+                // only valid while content-type is text
+                "patten": "hello, @(name), welcome @(name)",
+                // value dict of content
+                "value": [
+                    {
+                        "key": "name",
+                        "value": "$(a)"
+                    }
+                ],
+                // http-headers
+                "header": [
+                    // support variables
+                    { "key": "XXX", "value": "$(b)" }
+                ]
+            },
+            // get value from resp content
+            "content": {
+                // regex, json
+                "type": "regex",
+                // only valid while type is regex
+                "patten": "xxx(.*?)",
+                // get value from content
+                "value": [
+                    {
+                        // variable key
+                        "key": "xxx",
+                        // incase of regex, path is group number
+                        // incase of json, path is property name
+                        "path": "1"
+                    }
+                ]
+            },
+            "header": [
+                { "key": "xx_location", "path": "Location" }
+            ]
+        }
+    ],
+    // output dict
+    "output": [ "xxx", "yyy" ]
+}

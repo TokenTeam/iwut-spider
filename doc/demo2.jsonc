@@ -1,0 +1,61 @@
+{
+    "name": "ias_get_ticket_url",
+    "version": 1,
+    "environment": [
+        "zhlgd_login", "iwut_ulpl", "ias_name", "ias_pwd"
+    ],
+    "engine": {
+        "cookie": true,
+        "redirect": false
+    },
+    "task": [
+        {
+            "name": "Get ul&pl via iwut",
+            "url": "$(iwut_ulpl)",
+            "method": "POST",
+            "payload": {
+                "type": "json",
+                "patten": null,
+                "value": [
+                    { "key": "user", "path": "$(ias_name)" },
+                    { "key": "pwd", "path": "$(ias_pwd)"}
+                ]
+            },
+            "content": {
+                "type": "json",
+                "patten": null,
+                "value": [
+                    {
+                        "path": "data.ul",
+                        "key": "ul"
+                    },
+                    {
+                        "path": "data.pl",
+                        "key": "pl"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Login with ias",
+            "url": "$(zhlgd_login)",
+            "method": "GET",
+            "success": 200,
+            "payload": null,
+            "content": {
+                "type": "regex",
+                "patten": "(LT-\\d+-.+?-tpass)",
+                "value": [
+                    {
+                        "path": "1",
+                        "key": "lt",
+                    }
+                ]
+            },
+            "header": [
+                { "path": "Location", "key": "ias_redirect" }
+            ]
+        }
+    ],
+    "output": [ "" ]
+}
