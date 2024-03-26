@@ -1,0 +1,30 @@
+{
+  "version": 0,
+  "environment": [
+    "baseUrl",
+    "name"
+  ],
+  "engine": {
+    "cookie": true,
+    "redirect": true
+  },
+  "task": [
+    {
+      "url": "$(baseUrl)/basic/Hello?name=$(name)",
+      "method": "get",
+      "content": {
+        "type": "regex",
+        "patten": "Tom",
+        "value": [
+          {
+            "key": "name",
+            "path": "0"
+          }
+        ]
+      }
+    }
+  ],
+  "output": [
+    "name"
+  ]
+}

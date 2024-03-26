@@ -1,0 +1,30 @@
+{
+  "version": 0,
+  "environment": [
+    "baseUrl",
+    "redirectUrl"
+  ],
+  "engine": {
+    "cookie": true,
+    "redirect": true
+  },
+  "task": [
+    {
+      "url": "$(baseUrl)/basic/301?redirectUrl=$(redirectUrl)",
+      "method": "get",
+      "content": {
+        "type": "regex",
+        "patten": "Tom",
+        "value": [
+          {
+            "key": "name",
+            "path": "0"
+          }
+        ]
+      }
+    }
+  ],
+  "output": [
+    "name"
+  ]
+}

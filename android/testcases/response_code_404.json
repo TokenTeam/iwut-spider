@@ -1,0 +1,18 @@
+{
+  "version": 0,
+  "environment": [
+    "baseUrl",
+    "code"
+  ],
+  "engine": {
+    "cookie": true,
+    "redirect": true
+  },
+  "task": [
+    {
+      "url": "$(baseUrl)/basic/$(code)",
+      "success": 404,
+      "method": "get"
+    }
+  ]
+}
