@@ -11,7 +11,7 @@ interface IContentParser : IContextProvider {
 
     companion object {
 
-        fun create(type: SpiderParserType) : IContentParser =
+        fun create(type: SpiderParserType): IContentParser =
             when (type) {
                 SpiderParserType.JSON -> JsonContentParser()
                 SpiderParserType.REGEX -> RegexContentParser()

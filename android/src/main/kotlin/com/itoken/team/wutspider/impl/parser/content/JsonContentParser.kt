@@ -23,7 +23,8 @@ class JsonContentParser : IContentParser {
                         throw SpiderException("Non-exist JSON element near '$path' in '${it.path}'")
                     }
                 } else if (curr is JsonArray) {
-                    val index = path.toIntOrNull() ?: throw SpiderException("Not a valid index for JSON array near '$path' in '${it.path}'")
+                    val index = path.toIntOrNull()
+                        ?: throw SpiderException("Not a valid index for JSON array near '$path' in '${it.path}'")
                     curr = (curr as JsonArray).getOrElse(index) { _ ->
                         throw SpiderException("Non-exist JSON element near '$path' in '${it.path}'")
                     }

@@ -15,8 +15,12 @@ data class SpiderPayload @OptIn(ExperimentalSerializationApi::class) constructor
 
 
 enum class SpiderPayloadType {
-    @SerialName("text") TEXT,
-    @SerialName("json") JSON,
-    @SerialName("form") FORM,
-    @SerialName("params") PARAMS
+    @SerialName("text")
+    TEXT,
+    @SerialName("json")
+    JSON,
+    @SerialName("form")
+    FORM,
+    @SerialName("params")
+    PARAMS
 }

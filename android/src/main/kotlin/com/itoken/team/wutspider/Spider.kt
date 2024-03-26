@@ -10,7 +10,6 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
-import kotlin.jvm.Throws
 
 class Spider(private val httpClientProvider: ISpiderHttpClientProvider) : ISpider {
 
@@ -50,7 +49,7 @@ class Spider(private val httpClientProvider: ISpiderHttpClientProvider) : ISpide
 
         val result = mutableMapOf<String, String>()
         info.output?.forEach {
-            result[it] = context[it] ?: throw  SpiderException("Missing output variable: $it")
+            result[it] = context[it] ?: throw SpiderException("Missing output variable: $it")
         }
         return result
     }
@@ -61,7 +60,9 @@ class Spider(private val httpClientProvider: ISpiderHttpClientProvider) : ISpide
         val payload = task.payload?.let {
             if (it.value != null) {
                 IPayloadParser.create(it.type).also { it.context = context }.parse(it.pattern, it.value)
-            } else { "" }
+            } else {
+                ""
+            }
         } ?: ""
 
         // Send request

@@ -1,11 +1,9 @@
 package com.itoken.team.wutspider
 
-import com.itoken.team.wutspider.service.DefaultHttpClientProvider
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import java.io.File
 
 class SpiderBasicTest {
 

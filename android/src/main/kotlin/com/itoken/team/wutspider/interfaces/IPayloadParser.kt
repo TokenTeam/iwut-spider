@@ -8,11 +8,11 @@ import com.itoken.team.wutspider.model.SpiderPayloadType
 
 interface IPayloadParser : IContextProvider {
 
-    fun parse(pattern: String?, value : List<SpiderKeyValuePair>): String
+    fun parse(pattern: String?, value: List<SpiderKeyValuePair>): String
 
     companion object {
 
-        fun create(type: SpiderPayloadType) : IPayloadParser =
+        fun create(type: SpiderPayloadType): IPayloadParser =
             when (type) {
                 SpiderPayloadType.TEXT -> TextPayloadParser()
                 SpiderPayloadType.JSON -> JsonPayloadParser()

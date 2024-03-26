@@ -14,6 +14,8 @@ data class SpiderParserInfo @OptIn(ExperimentalSerializationApi::class) construc
 
 @Serializable
 enum class SpiderParserType {
-    @SerialName("regex") REGEX,
-    @SerialName("json") JSON
+    @SerialName("regex")
+    REGEX,
+    @SerialName("json")
+    JSON
 }

@@ -15,6 +15,8 @@ data class SpiderTaskInfo(
 )
 
 enum class SpiderMethod {
-    @SerialName("get") GET,
-    @SerialName("post") POST
+    @SerialName("get")
+    GET,
+    @SerialName("post")
+    POST
 }

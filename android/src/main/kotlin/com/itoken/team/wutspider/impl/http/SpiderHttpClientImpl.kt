@@ -20,11 +20,14 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
             }
         }.build()
 
-    private fun Request.Builder.applySpiderDefaults() : Request.Builder {
-        return addHeader("User-Agent",  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0")
+    private fun Request.Builder.applySpiderDefaults(): Request.Builder {
+        return addHeader(
+            "User-Agent",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0"
+        )
     }
 
-    private fun makeRequest(request: Request, success: Int) : ISpiderHttpClient.HttpClientResponse {
+    private fun makeRequest(request: Request, success: Int): ISpiderHttpClient.HttpClientResponse {
         return runCatching {
             client.newCall(request).execute()
         }.map {
@@ -67,7 +70,7 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
         payloadType: SpiderPayloadType,
         success: Int
     ): ISpiderHttpClient.HttpClientResponse {
-        val mediaType = when(payloadType) {
+        val mediaType = when (payloadType) {
             SpiderPayloadType.JSON -> "application/json".toMediaTypeOrNull()
             SpiderPayloadType.FORM -> "application/x-www-form-urlencoded".toMediaTypeOrNull()
             else -> "application/text".toMediaTypeOrNull()

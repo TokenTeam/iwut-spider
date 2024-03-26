@@ -17,7 +17,11 @@ class JsonPayloadParser : IPayloadParser {
                 val actualValue = pair.value.fillVariables(context ?: throw SpiderException("Context is null"))
                 when (pair.type) {
                     SpiderValueType.STRING -> json.put(pair.key, actualValue)
-                    SpiderValueType.NUMBER -> json.put(pair.key, actualValue.toDoubleOrNull() ?: throw SpiderException("can not interpret '${pair.value}' as a number"))
+                    SpiderValueType.NUMBER -> json.put(pair.key,
+                        actualValue.toDoubleOrNull()
+                            ?: throw SpiderException("can not interpret '${pair.value}' as a number")
+                    )
+
                     SpiderValueType.BOOLEAN -> json.put(pair.key, actualValue.toBoolean())
                     SpiderValueType.OBJECT -> json.put(pair.key, JSONObject(actualValue))
                 }

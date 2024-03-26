@@ -11,8 +11,12 @@ data class SpiderKeyValuePair(
 )
 
 enum class SpiderValueType {
-    @SerialName("string") STRING,
-    @SerialName("number") NUMBER,
-    @SerialName("boolean") BOOLEAN,
-    @SerialName("object") OBJECT
+    @SerialName("string")
+    STRING,
+    @SerialName("number")
+    NUMBER,
+    @SerialName("boolean")
+    BOOLEAN,
+    @SerialName("object")
+    OBJECT
 }
