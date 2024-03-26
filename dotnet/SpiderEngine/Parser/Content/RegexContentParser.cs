@@ -1,37 +1,36 @@
-﻿namespace SpiderEngine.Parser.Content
+﻿namespace SpiderEngine.Parser.Content;
+
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using SpiderEngine.Abstract;
+using SpiderEngine.Exception;
+using SpiderEngine.Model;
+
+internal class RegexContentParser : IContentParser
 {
-    using System.Collections.Generic;
-    using System.Text.RegularExpressions;
-    using SpiderEngine.Abstract;
-    using SpiderEngine.Exception;
-    using SpiderEngine.Model;
+    public IDictionary<string, string> Context { get; set; } = default!;
 
-    internal class RegexContentParser : IContentParser
+    public void Parse(string content, string patten, IEnumerable<SpiderKeyPathPair> value)
     {
-        public IDictionary<string, string> Context { get; set; } = default!;
-
-        public void Parse(string content, string patten, IEnumerable<SpiderKeyPathPair> value)
+        var match = Regex.Match(content, patten);
+        if (!match.Success)
         {
-            var match = Regex.Match(content, patten);
-            if (!match.Success)
+            throw new ParseException("Content does not match the patten.");
+        }
+        try
+        {
+            foreach (var pair in value)
             {
-                throw new ParseException("Content does not match the patten.");
+                Context[pair.Key] = match.Groups[int.Parse(pair.Path)].Value;
             }
-            try
-            {
-                foreach (var pair in value)
-                {
-                    Context[pair.Key] = match.Groups[int.Parse(pair.Path)].Value;
-                }
-            }
-            catch (AggregateException ex)
-            {
-                throw new ParseException("Regex parse failed", [.. ex.InnerExceptions]);
-            }
-            catch (System.Exception ex)
-            {
-                throw new ParseException("Content does not match the patten.", ex);
-            }
+        }
+        catch (AggregateException ex)
+        {
+            throw new ParseException("Regex parse failed", [.. ex.InnerExceptions]);
+        }
+        catch (System.Exception ex)
+        {
+            throw new ParseException("Content does not match the patten.", ex);
         }
     }
 }

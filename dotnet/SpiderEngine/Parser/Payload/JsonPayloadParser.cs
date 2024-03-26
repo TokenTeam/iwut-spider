@@ -1,48 +1,47 @@
-﻿namespace SpiderEngine.Parser.Payload
+﻿namespace SpiderEngine.Parser.Payload;
+
+using System.Collections.Generic;
+using System.Text;
+using System.Text.Json;
+using SpiderEngine.Abstract;
+using SpiderEngine.Model;
+using SpiderEngine.Utility;
+
+internal class JsonPayloadParser : IPayloadParser
 {
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Text.Json;
-    using SpiderEngine.Abstract;
-    using SpiderEngine.Model;
-    using SpiderEngine.Utility;
+    public IDictionary<string, string> Context { get; set; } = default!;
 
-    internal class JsonPayloadParser : IPayloadParser
+    public string Parse(string patten, IEnumerable<SpiderKeyValuePair> value)
     {
-        public IDictionary<string, string> Context { get; set; } = default!;
+        using var stream = new MemoryStream();
+        var json = new Utf8JsonWriter(stream);
 
-        public string Parse(string patten, IEnumerable<SpiderKeyValuePair> value)
+        json.WriteStartObject();
+        foreach (var pair in value)
         {
-            using var stream = new MemoryStream();
-            var json = new Utf8JsonWriter(stream);
+            json.WriteStartObject(pair.Key);
+            var valueExpression = pair.Value.FillVariables(Context);
 
-            json.WriteStartObject();
-            foreach (var pair in value)
+            switch (pair.Type)
             {
-                json.WriteStartObject(pair.Key);
-                var valueExpression = pair.Value.FillVariables(Context);
-
-                switch (pair.Type)
-                {
-                    case SpiderValueType.String:
-                        json.WriteStringValue(valueExpression);
-                        break;
-                    case SpiderValueType.Number:
-                        json.WriteNumberValue(double.Parse(valueExpression));
-                        break;
-                    case SpiderValueType.Boolean:
-                        json.WriteBooleanValue(bool.Parse(valueExpression));
-                        break;
-                    case SpiderValueType.Object:
-                        json.WriteRawValue(valueExpression);
-                        break;
-                }
-                json.WriteEndObject();
+                case SpiderValueType.String:
+                    json.WriteStringValue(valueExpression);
+                    break;
+                case SpiderValueType.Number:
+                    json.WriteNumberValue(double.Parse(valueExpression));
+                    break;
+                case SpiderValueType.Boolean:
+                    json.WriteBooleanValue(bool.Parse(valueExpression));
+                    break;
+                case SpiderValueType.Object:
+                    json.WriteRawValue(valueExpression);
+                    break;
             }
             json.WriteEndObject();
-            json.Flush();
-
-            return Encoding.UTF8.GetString(stream.ToArray());
         }
+        json.WriteEndObject();
+        json.Flush();
+
+        return Encoding.UTF8.GetString(stream.ToArray());
     }
 }

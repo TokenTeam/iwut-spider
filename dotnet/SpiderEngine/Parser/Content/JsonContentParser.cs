@@ -1,49 +1,48 @@
-﻿namespace SpiderEngine.Parser.Content
+﻿namespace SpiderEngine.Parser.Content;
+
+using System.Collections.Generic;
+using System.Text.Json;
+using SpiderEngine.Abstract;
+using SpiderEngine.Exception;
+using SpiderEngine.Model;
+
+internal class JsonContentParser : IContentParser
 {
-    using System.Collections.Generic;
-    using System.Text.Json;
-    using SpiderEngine.Abstract;
-    using SpiderEngine.Exception;
-    using SpiderEngine.Model;
+    public IDictionary<string, string> Context { get; set; } = default!;
 
-    internal class JsonContentParser : IContentParser
+    public void Parse(string content, string patten, IEnumerable<SpiderKeyPathPair> value)
     {
-        public IDictionary<string, string> Context { get; set; } = default!;
-
-        public void Parse(string content, string patten, IEnumerable<SpiderKeyPathPair> value)
+        try
         {
-            try
+            JsonDocument document = JsonDocument.Parse(content);
+            foreach (var pair in value)
             {
-                JsonDocument document = JsonDocument.Parse(content);
-                foreach (var pair in value)
+                JsonElement element = document.RootElement;
+                foreach (var path in pair.Path.Split('.'))
                 {
-                    JsonElement element = document.RootElement;
-                    foreach (var path in pair.Path.Split('.'))
+                    if (element.ValueKind == JsonValueKind.Array)
                     {
-                        if (element.ValueKind == JsonValueKind.Array)
-                        {
-                            element = element[int.Parse(path)];
-                        }
-                        else
-                        {
-                            element = element.GetProperty(path);
-                        }
+                        element = element[int.Parse(path)];
                     }
-                    Context[pair.Key] = element.GetString() ?? string.Empty;
+                    else
+                    {
+                        element = element.GetProperty(path);
+                    }
                 }
+                Context[pair.Key] = element.GetString() ?? string.Empty;
             }
-            catch (JsonException ex)
-            {
-                throw new ParseException("Json parse failed", ex);
-            }
-            catch (AggregateException ex)
-            {
-                throw new ParseException("Json parse failed", [.. ex.InnerExceptions]);
-            }
-            catch (System.Exception ex)
-            {
-                throw new ParseException("Json parse failed", ex);
-            }
+        }
+        catch (JsonException ex)
+        {
+            throw new ParseException("Json parse failed", ex);
+        }
+        catch (AggregateException ex)
+        {
+            throw new ParseException("Json parse failed", [.. ex.InnerExceptions]);
+        }
+        catch (System.Exception ex)
+        {
+            throw new ParseException("Json parse failed", ex);
         }
     }
 }

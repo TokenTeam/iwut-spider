@@ -1,11 +1,10 @@
-﻿namespace SpiderEngine.Service
-{
-    using SpiderEngine.Abstract;
-    using SpiderEngine.Http;
-    using SpiderEngine.Model;
+﻿namespace SpiderEngine.Service;
 
-    internal class DefaultSpiderHttpClientProvider : ISpiderHttpClientProvider
-    {
-        public ISpiderHttpClient Create(EngineOptions options) => new SpiderHttpClient(options);
-    }
+using SpiderEngine.Abstract;
+using SpiderEngine.Http;
+using SpiderEngine.Model;
+
+internal class DefaultSpiderHttpClientProvider : ISpiderHttpClientProvider
+{
+    public ISpiderHttpClient Create(EngineOptions options) => new SpiderHttpClient(options);
 }

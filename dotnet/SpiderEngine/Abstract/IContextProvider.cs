@@ -1,7 +1,6 @@
-﻿namespace SpiderEngine.Abstract
+﻿namespace SpiderEngine.Abstract;
+
+internal interface IContextProvider
 {
-    internal interface IContextProvider
-    {
-        IDictionary<string, string> Context { get; set; }
-    }
+    IDictionary<string, string> Context { get; set; }
 }

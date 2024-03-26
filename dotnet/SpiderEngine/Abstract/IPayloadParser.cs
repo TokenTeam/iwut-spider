@@ -1,19 +1,18 @@
-﻿namespace SpiderEngine.Abstract
+﻿namespace SpiderEngine.Abstract;
+
+using SpiderEngine.Model;
+using SpiderEngine.Parser.Payload;
+
+internal interface IPayloadParser : IContextProvider
 {
-    using SpiderEngine.Model;
-    using SpiderEngine.Parser.Payload;
+    string Parse(string patten, IEnumerable<SpiderKeyValuePair> value);
 
-    internal interface IPayloadParser : IContextProvider
+    public static IPayloadParser Create(SpiderPayloadType type) => type switch
     {
-        string Parse(string patten, IEnumerable<SpiderKeyValuePair> value);
-
-        public static IPayloadParser Create(SpiderPayloadType type) => type switch
-        {
-            SpiderPayloadType.Text => throw new NotImplementedException(),
-            SpiderPayloadType.Json => new JsonPayloadParser(),
-            SpiderPayloadType.Form => new FormPayloadParser(),
-            SpiderPayloadType.Params => new FormPayloadParser(),
-            _ => throw new NotImplementedException(),
-        };
-    }
+        SpiderPayloadType.Text => throw new NotImplementedException(),
+        SpiderPayloadType.Json => new JsonPayloadParser(),
+        SpiderPayloadType.Form => new FormPayloadParser(),
+        SpiderPayloadType.Params => new FormPayloadParser(),
+        _ => throw new NotImplementedException(),
+    };
 }
