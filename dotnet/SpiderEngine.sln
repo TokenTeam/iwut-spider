@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpiderEngine", "SpiderEngin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiderEngine.DependencyInjection", "SpiderEngine.DependencyInjection\SpiderEngine.DependencyInjection.csproj", "{68E564EF-B813-45BA-909F-7831F3571C79}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiderEngine.TestApi", "SpiderEngine.TestApi\SpiderEngine.TestApi.csproj", "{B3212E75-BC03-4AE5-BFA6-52A10CB014EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiderEngine.Test", "SpiderEngine.Test\SpiderEngine.Test.csproj", "{7F65E7D4-5909-4FD6-806B-2BC290AFD6ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{68E564EF-B813-45BA-909F-7831F3571C79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68E564EF-B813-45BA-909F-7831F3571C79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68E564EF-B813-45BA-909F-7831F3571C79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3212E75-BC03-4AE5-BFA6-52A10CB014EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3212E75-BC03-4AE5-BFA6-52A10CB014EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3212E75-BC03-4AE5-BFA6-52A10CB014EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3212E75-BC03-4AE5-BFA6-52A10CB014EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F65E7D4-5909-4FD6-806B-2BC290AFD6ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F65E7D4-5909-4FD6-806B-2BC290AFD6ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F65E7D4-5909-4FD6-806B-2BC290AFD6ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F65E7D4-5909-4FD6-806B-2BC290AFD6ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

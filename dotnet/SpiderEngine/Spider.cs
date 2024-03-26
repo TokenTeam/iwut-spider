@@ -38,12 +38,17 @@ internal class Spider : ISpider
         var httpClient = httpClientProvider.Create(spiderInfo.Engine);
 
         // run steps
-        foreach (var spiderTask in spiderInfo.Task)
+        foreach (var spiderTask in spiderInfo.Task ?? Array.Empty<SpiderTaskInfo>())
         {
             RunStep(spiderTask, environment, httpClient).Wait();
         }
 
         // check output
+        if (spiderInfo.Output == null)
+        {
+            return new Dictionary<string, string>();
+        }
+
         if (!spiderInfo.Output.All(environment.ContainsKey))
         {
             throw new InvalidOperationException("Missing output variables.");

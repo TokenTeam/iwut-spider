@@ -1,0 +1,6 @@
+@SpiderEngine.TestApi_HostAddress = http://localhost:5016
+
+GET {{SpiderEngine.TestApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
