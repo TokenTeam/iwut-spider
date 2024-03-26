@@ -1,0 +1,17 @@
+{
+  "version": 0,
+  "environment": [
+    "a",
+    "b",
+    "c"
+  ],
+  "engine": {
+    "cookie": true,
+    "redirect": true
+  },
+  "output": [
+    "a",
+    "b",
+    "c"
+  ]
+}
