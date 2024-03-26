@@ -1,0 +1,35 @@
+{
+  "version": 0,
+  "environment": [
+    "baseUrl"
+  ],
+  "engine": {
+    "cookie": true,
+    "redirect": true
+  },
+  "task": [
+    {
+      "url": "$(baseUrl)/header/echo",
+      "method": "get",
+      "payload": {
+        "type": "params",
+        "header": [
+          {
+            "key": "Echo",
+            "value": "Tom",
+            "type": "string"
+          }
+        ]
+      },
+      "header": [
+        {
+          "key": "value",
+          "path": "Echo"
+        }
+      ]
+    }
+  ],
+  "output": [
+    "value"
+  ]
+}

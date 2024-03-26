@@ -1,0 +1,53 @@
+{
+  "version": 0,
+  "environment": [
+    "baseUrl"
+  ],
+  "engine": {
+    "cookie": true,
+    "redirect": true
+  },
+  "task": [
+    {
+      "url": "$(baseUrl)/json/user",
+      "method": "get",
+      "content": {
+        "type": "json",
+        "value": [
+          {
+            "key": "name_0",
+            "path": "0.name"
+          },
+          {
+            "key": "age_0",
+            "path": "0.age"
+          },
+          {
+            "key": "name_1",
+            "path": "1.name"
+          },
+          {
+            "key": "age_1",
+            "path": "1.age"
+          },
+          {
+            "key": "name_2",
+            "path": "2.name"
+          },
+          {
+            "key": "age_2",
+            "path": "2.age"
+          }
+        ]
+      }
+    }
+  ],
+  "output": [
+    "name_0",
+    "age_0",
+    "name_1",
+    "age_1",
+    "name_2",
+    "age_2"
+  ]
+}

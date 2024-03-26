@@ -67,6 +67,9 @@ public class Post
             Output = ["a", "b"]
         };
 
+        var json = _spider.Serialize(spiderInfo);
+        File.WriteAllText("post_form.json", json);
+
         var output = _spider.Run(spiderInfo, new Dictionary<string, string>
         {
             { "baseUrl", Config.ApiBaseUrl }
@@ -131,10 +134,14 @@ public class Post
             Output = ["a", "b"]
         };
 
+        var json = _spider.Serialize(spiderInfo);
+        File.WriteAllText("post_json.json", json);
+
         var output = _spider.Run(spiderInfo, new Dictionary<string, string>
         {
             { "baseUrl", Config.ApiBaseUrl }
         });
+
         Assert.Equal("Jerry", output["a"]);
         Assert.Equal("20", output["b"]);
     }
@@ -197,10 +204,14 @@ public class Post
             Output = ["name_0", "age_0", "name_1", "age_1", "name_2", "age_2"]
         };
 
+        var json = _spider.Serialize(spiderInfo);
+        File.WriteAllText("parse_json.json", json);
+
         var output = _spider.Run(spiderInfo, new Dictionary<string, string>
         {
             { "baseUrl", Config.ApiBaseUrl }
         });
+
         Assert.Equal("Alice", output["name_0"]);
         Assert.Equal("20", output["age_0"]);
         Assert.Equal("Bob", output["name_1"]);

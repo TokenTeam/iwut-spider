@@ -53,6 +53,9 @@ public class Header
             Output = ["value"]
         };
 
+        var json = _spider.Serialize(spiderInfo);
+        File.WriteAllText("header_echo.json", json);
+
         var output = _spider.Run(spiderInfo, new Dictionary<string, string>
         {
             ["baseUrl"] = Config.ApiBaseUrl
@@ -105,6 +108,9 @@ public class Header
             },
             Output = ["value"]
         };
+
+        var json = _spider.Serialize(spiderInfo);
+        File.WriteAllText("header_double.json", json);
 
         var output = _spider.Run(spiderInfo, new Dictionary<string, string>
         {
