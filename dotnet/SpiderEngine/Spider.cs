@@ -68,6 +68,11 @@ internal class Spider : ISpider
         return JsonSerializer.Serialize(spiderInfo, jsonOption);
     }
 
+    public string GetSchema()
+    {
+        return SpiderSchema.GetSchema();
+    }
+
     private static async Task RunStep(SpiderTaskInfo spiderTask, IDictionary<string, string> environment, ISpiderHttpClient httpClient)
     {
         // parse payload

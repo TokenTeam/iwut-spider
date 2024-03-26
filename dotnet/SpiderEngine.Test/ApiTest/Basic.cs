@@ -14,6 +14,14 @@
         private readonly ISpider _spider;
 
         [Fact]
+        public void GetSchema()
+        {
+            var schema = _spider.GetSchema();
+            File.WriteAllText("schema.json", schema);
+            Assert.NotNull(schema);
+        }
+
+        [Fact]
         public void EnvironmentAndOutput()
         {
             var spiderInfo = new SpiderInfo

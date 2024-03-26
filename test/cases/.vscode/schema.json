@@ -1,0 +1,275 @@
+{
+  "definitions": {
+    "EngineOptions": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "cookie": {
+          "type": "boolean"
+        },
+        "redirect": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "cookie",
+        "redirect"
+      ]
+    },
+    "SpiderKeyPathPair": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "key": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "key",
+        "path"
+      ]
+    },
+    "SpiderKeyValuePair": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "key": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "String",
+            "Number",
+            "Boolean",
+            "Object"
+          ]
+        }
+      },
+      "required": [
+        "key",
+        "value",
+        "type"
+      ]
+    },
+    "SpiderParserInfo": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Regex",
+            "Json"
+          ]
+        },
+        "patten": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "value": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/SpiderKeyPathPair"
+          }
+        }
+      },
+      "required": [
+        "type",
+        "patten",
+        "value"
+      ]
+    },
+    "SpiderPayload": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Text",
+            "Json",
+            "Form",
+            "Params"
+          ]
+        },
+        "patten": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "value": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/SpiderKeyValuePair"
+          }
+        },
+        "header": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/SpiderKeyValuePair"
+          }
+        }
+      },
+      "required": [
+        "type",
+        "patten",
+        "value",
+        "header"
+      ]
+    },
+    "SpiderTaskInfo": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "success": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "method": {
+          "type": "string",
+          "enum": [
+            "Get",
+            "Post"
+          ]
+        },
+        "payload": {
+          "$ref": "#/definitions/SpiderPayload"
+        },
+        "content": {
+          "$ref": "#/definitions/SpiderParserInfo"
+        },
+        "header": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/SpiderKeyPathPair"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "url",
+        "success",
+        "method",
+        "payload",
+        "content",
+        "header"
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "version": {
+      "type": "integer"
+    },
+    "environment": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "engine": {
+      "$ref": "#/definitions/EngineOptions"
+    },
+    "task": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/definitions/SpiderTaskInfo"
+      }
+    },
+    "output": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    }
+  },
+  "required": [
+    "name",
+    "version",
+    "environment",
+    "engine",
+    "task",
+    "output"
+  ]
+}

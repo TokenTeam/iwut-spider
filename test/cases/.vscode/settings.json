@@ -1,0 +1,8 @@
+{
+    "json.schemas": [
+        {
+            "fileMatch": ["*.json", "!settings.json", "!schema.json"],
+            "url": "./.vscode/schema.json"
+        }
+    ]
+}
