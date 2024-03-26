@@ -17,9 +17,9 @@ internal class JsonPayloadParser : IPayloadParser
         var json = new Utf8JsonWriter(stream);
 
         json.WriteStartObject();
-        foreach (var pair in value)
+        foreach (var pair in value ?? Array.Empty<SpiderKeyValuePair>())
         {
-            json.WriteStartObject(pair.Key);
+            json.WritePropertyName(pair.Key);
             var valueExpression = pair.Value.FillVariables(Context);
 
             switch (pair.Type)
@@ -37,7 +37,6 @@ internal class JsonPayloadParser : IPayloadParser
                     json.WriteRawValue(valueExpression);
                     break;
             }
-            json.WriteEndObject();
         }
         json.WriteEndObject();
         json.Flush();

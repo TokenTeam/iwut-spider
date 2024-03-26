@@ -29,7 +29,7 @@ internal class JsonContentParser : IContentParser
                         element = element.GetProperty(path);
                     }
                 }
-                Context[pair.Key] = element.GetString() ?? string.Empty;
+                Context[pair.Key] = element.ToString() ?? string.Empty;
             }
         }
         catch (JsonException ex)
