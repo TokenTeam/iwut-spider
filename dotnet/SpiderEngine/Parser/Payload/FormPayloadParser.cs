@@ -13,6 +13,11 @@ internal class FormPayloadParser : IPayloadParser
 
     public string Parse(string patten, IEnumerable<SpiderKeyValuePair> value)
     {
+        if (value is null || !value.Any())
+        {
+            return string.Empty;
+        }
+
         var sb = new StringBuilder();
         foreach (var pair in value)
         {

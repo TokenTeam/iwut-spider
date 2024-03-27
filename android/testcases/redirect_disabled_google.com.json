@@ -1,0 +1,37 @@
+{
+  "version": 0,
+  "environment": [
+    "baseUrl",
+    "redirectUrl"
+  ],
+  "engine": {
+    "cookie": true,
+    "redirect": false
+  },
+  "task": [
+    {
+      "url": "$(baseUrl)/basic/301",
+      "success": 302,
+      "method": "get",
+      "payload": {
+        "type": "params",
+        "value": [
+          {
+            "key": "redirectUrl",
+            "value": "$(redirectUrl)",
+            "type": "string"
+          }
+        ]
+      },
+      "header": [
+        {
+          "key": "url",
+          "path": "Location"
+        }
+      ]
+    }
+  ],
+  "output": [
+    "url"
+  ]
+}

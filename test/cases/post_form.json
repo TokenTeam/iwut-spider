@@ -1,0 +1,48 @@
+{
+  "version": 0,
+  "environment": [
+    "baseUrl"
+  ],
+  "engine": {
+    "cookie": true,
+    "redirect": true
+  },
+  "task": [
+    {
+      "url": "$(baseUrl)/form/user",
+      "method": "post",
+      "payload": {
+        "type": "form",
+        "value": [
+          {
+            "key": "name",
+            "value": "Tom",
+            "type": "string"
+          },
+          {
+            "key": "age",
+            "value": "18",
+            "type": "string"
+          }
+        ]
+      },
+      "content": {
+        "type": "json",
+        "value": [
+          {
+            "key": "a",
+            "path": "name"
+          },
+          {
+            "key": "b",
+            "path": "age"
+          }
+        ]
+      }
+    }
+  ],
+  "output": [
+    "a",
+    "b"
+  ]
+}

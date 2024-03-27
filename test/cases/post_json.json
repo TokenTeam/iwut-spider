@@ -1,0 +1,48 @@
+{
+  "version": 0,
+  "environment": [
+    "baseUrl"
+  ],
+  "engine": {
+    "cookie": true,
+    "redirect": true
+  },
+  "task": [
+    {
+      "url": "$(baseUrl)/json/user",
+      "method": "post",
+      "payload": {
+        "type": "json",
+        "value": [
+          {
+            "key": "name",
+            "value": "Jerry",
+            "type": "string"
+          },
+          {
+            "key": "age",
+            "value": "20",
+            "type": "number"
+          }
+        ]
+      },
+      "content": {
+        "type": "json",
+        "value": [
+          {
+            "key": "a",
+            "path": "name"
+          },
+          {
+            "key": "b",
+            "path": "age"
+          }
+        ]
+      }
+    }
+  ],
+  "output": [
+    "a",
+    "b"
+  ]
+}
