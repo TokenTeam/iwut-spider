@@ -15,7 +15,7 @@ internal static class SpiderSchema
                 NamingStrategy = new SnakeCaseNamingStrategy()
             }
         };
-        generator.GenerationProviders.Add(new StringEnumGenerationProvider());
+        generator.GenerationProviders.Add(new StringEnumGenerationProvider() { CamelCaseText = true });
         var schema = generator.Generate(typeof(SpiderInfo));
         _schema = schema.ToString();
     }

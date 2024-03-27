@@ -1,0 +1,37 @@
+{
+    "name": "ias_get_ul_pl",
+    "version": 1,
+    "engine": {
+        "cookie": false,
+        "redirect": false
+    },
+    "environment": ["pubkey", "user", "pwd"],
+    "task": [
+        {
+            "name": "get_ul_pl",
+            "url": "http://localhost:5000/ias/get_ul_pl",
+            "success": 200,
+            "method": "post",
+            "payload": {
+                "type": "form",
+                "patten": "",
+                "value": [
+                    { "key": "user", "value": "$(user)", "type": "string" },
+                    { "key": "pwd", "value": "$(pwd)", "type": "string" },
+                    { "key": "pubkey", "value": "$(pubkey)", "type": "string" }
+                ],
+                "header": []
+            },
+            "content": {
+                "type": "json",
+                "patten": "",
+                "value": [
+                    { "key": "ul", "path": "ul" },
+                    { "key": "pl", "path": "pl" }
+                ]
+            },
+            "header": []
+        }
+    ],
+    "output": ["ul", "pl"]
+}

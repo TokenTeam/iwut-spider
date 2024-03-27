@@ -1,0 +1,86 @@
+{
+    "name": "ias_get_ticket",
+    "version": 1,
+    "engine": {
+        "cookie": true,
+        "redirect": false
+    },
+    "environment": ["ul", "pl"],
+    "task": [
+        {
+            "name": "get_lt",
+            "url": "https://zhlgd.whut.edu.cn/tpass/login",
+            "method": "get",
+            "success": 200,
+            "payload": {
+                "type": "params",
+                "patten": "",
+                "value": [
+                    {
+                        "key": "service",
+                        "value": "https://zhlgd.whut.edu.cn/tp_up/../tp",
+                        "type": "string"
+                    }
+                ],
+                "header": []
+            },
+            "content": {
+                "type": "regex",
+                "patten": "(LT-\\d+-.+?-tpass)",
+                "value": [
+                    {
+                        "key": "lt",
+                        "path": "1"
+                    }
+                ]
+            },
+            "header": []
+        },
+        {
+            "name": "ias_login_get_ticket",
+            "url": "https://zhlgd.whut.edu.cn/tpass/login?service=https://zhlgd.whut.edu.cn/tp_up/../tp",
+            "method": "post",
+            "success": 302,
+            "payload": {
+                "type": "params",
+                "patten": "",
+                "value": [
+                    {
+                        "key": "ul",
+                        "value": "$(ul)",
+                        "type": "string"
+                    },
+                    {
+                        "key": "pl",
+                        "value": "$(pl)",
+                        "type": "string"
+                    },
+                    {
+                        "key": "lt",
+                        "value": "$(lt)",
+                        "type": "string"
+                    },
+                    {
+                        "key": "execution",
+                        "value": "e1s1",
+                        "type": "string"
+                    },
+                    {
+                        "key": "_eventId",
+                        "value": "submit",
+                        "type": "string"
+                    }
+                ],
+                "header": []
+            },
+            "content": null,
+            "header": [
+                {
+                    "key": "url_ticket",
+                    "path": "Location"
+                }
+            ]
+        }
+    ],
+    "output": ["url_ticket"]
+}

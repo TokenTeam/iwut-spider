@@ -63,10 +63,10 @@
         "type": {
           "type": "string",
           "enum": [
-            "String",
-            "Number",
-            "Boolean",
-            "Object"
+            "string",
+            "number",
+            "boolean",
+            "object"
           ]
         }
       },
@@ -85,8 +85,8 @@
         "type": {
           "type": "string",
           "enum": [
-            "Regex",
-            "Json"
+            "regex",
+            "json"
           ]
         },
         "patten": {
@@ -120,10 +120,10 @@
         "type": {
           "type": "string",
           "enum": [
-            "Text",
-            "Json",
-            "Form",
-            "Params"
+            "text",
+            "json",
+            "form",
+            "params"
           ]
         },
         "patten": {
@@ -185,8 +185,8 @@
         "method": {
           "type": "string",
           "enum": [
-            "Get",
-            "Post"
+            "get",
+            "post"
           ]
         },
         "payload": {
