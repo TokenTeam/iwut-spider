@@ -1,0 +1,40 @@
+{
+  "version": 0,
+  "environment": [
+    "baseUrl"
+  ],
+  "engine": {
+    "cookie": true,
+    "redirect": true
+  },
+  "task": [
+    {
+      "url": "$(baseUrl)/header/double",
+      "method": "get",
+      "payload": {
+        "type": "params",
+        "header": [
+          {
+            "key": "Value1",
+            "value": "Tom",
+            "type": "string"
+          },
+          {
+            "key": "Value2",
+            "value": "Jerry",
+            "type": "string"
+          }
+        ]
+      },
+      "header": [
+        {
+          "key": "value",
+          "path": "Value"
+        }
+      ]
+    }
+  ],
+  "output": [
+    "value"
+  ]
+}

@@ -15,10 +15,11 @@ class SpiderRedirectTest {
             env = mapOf(
                 "baseUrl" to ApiBaseUrl,
                 "redirectUrl" to "$ApiBaseUrl/basic/Hello?name=$name"
+            ),
+            expectations = mapOf(
+                "name" to name
             )
-        ).let { out ->
-            assertEquals(name, out["name"])
-        }
+        )
     }
 
     @ParameterizedTest

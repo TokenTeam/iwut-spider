@@ -69,9 +69,12 @@ fun testHello(name: String) {
         env = mapOf(
             "baseUrl" to ApiBaseUrl,
             "name" to name
-        ) /* initial context variables */
+        ), /* initial context variables */
+        expectations = mapOf(
+            "name" to name // value of spider variable called "name" must be equal to `name`
+        )
     ).let { out -> 
-        /* assertions on output variables */
+        /* other assertions */
         assertEquals(name, out["name"])
     }
 }

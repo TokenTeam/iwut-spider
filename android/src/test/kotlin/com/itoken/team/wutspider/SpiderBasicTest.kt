@@ -16,12 +16,13 @@ class SpiderBasicTest {
                 "a" to "1",
                 "b" to "2",
                 "c" to "3"
+            ),
+            expectations = mapOf(
+                "a" to "1",
+                "b" to "2",
+                "c" to "3"
             )
-        ).let { out ->
-            assertEquals("1", out["a"])
-            assertEquals("2", out["b"])
-            assertEquals("3", out["c"])
-        }
+        )
     }
 
 
@@ -45,10 +46,11 @@ class SpiderBasicTest {
             env = mapOf(
                 "baseUrl" to ApiBaseUrl,
                 "name" to name
+            ),
+            expectations = mapOf(
+                "name" to name
             )
-        ).let { out ->
-            assertEquals(name, out["name"])
-        }
+        )
     }
 
 }
