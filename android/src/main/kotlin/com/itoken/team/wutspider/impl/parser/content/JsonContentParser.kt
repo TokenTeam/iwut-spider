@@ -3,9 +3,7 @@ package com.itoken.team.wutspider.impl.parser.content
 import com.itoken.team.wutspider.SpiderException
 import com.itoken.team.wutspider.interfaces.IContentParser
 import com.itoken.team.wutspider.model.SpiderKeyPathPair
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.*
 
 class JsonContentParser : IContentParser {
 
@@ -33,7 +31,14 @@ class JsonContentParser : IContentParser {
                     throw SpiderException("Not a JSON object or array element near '$path' in '${it.path}'")
                 }
             }
-            context?.put(it.key, curr.toString())
+            val jsonValue = when (curr) {
+                is JsonObject -> curr.toString()
+                is JsonArray -> curr.toString()
+                is JsonPrimitive -> curr.jsonPrimitive.content
+                JsonNull -> ""
+                else -> ""
+            }
+            context?.put(it.key, jsonValue)
         }
     }
 
