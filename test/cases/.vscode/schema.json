@@ -203,6 +203,12 @@
           "items": {
             "$ref": "#/definitions/SpiderKeyPathPair"
           }
+        },
+        "delay": {
+          "type": [
+            "integer",
+            "null"
+          ]
         }
       },
       "required": [

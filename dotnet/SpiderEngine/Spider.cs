@@ -40,7 +40,18 @@ internal class Spider : ISpider
         // run steps
         foreach (var spiderTask in spiderInfo.Task ?? Array.Empty<SpiderTaskInfo>())
         {
-            RunStep(spiderTask, environment, httpClient).Wait();
+            try
+            {
+                RunStep(spiderTask, environment, httpClient).Wait();
+                if (spiderTask.Delay != 0)
+                {
+                    Thread.Sleep(spiderTask.Delay);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                throw new AggregateException($"Run step {spiderTask.Name} failed.", ex);
+            }
         }
 
         // check output
@@ -103,7 +114,7 @@ internal class Spider : ISpider
         }
         else
         {
-            (respContent, respHeaders) = await httpClient.PostAsync(spiderTask.Url.FillVariables(environment), requestHeaders, payload, payloadInfo?.Type ?? SpiderPayloadType.Text);
+            (respContent, respHeaders) = await httpClient.PostAsync(spiderTask.Url.FillVariables(environment), requestHeaders, payload, payloadInfo?.Type ?? SpiderPayloadType.Text, successCode);
         }
 
         // parse content
