@@ -25,17 +25,25 @@ internal class Spider : ISpider
     private readonly ISpiderHttpClientProvider httpClientProvider;
     private readonly JsonSerializerOptions jsonOption;
 
-    public IDictionary<string, string> Run(SpiderInfo spiderInfo, IDictionary<string, string> environment)
+    public ISpiderHttpClient CreateClient(SpiderInfo spiderInfo)
+    {        
+        // create http client
+        var httpClient = httpClientProvider.Create(spiderInfo.Engine);
+        return httpClient;
+    }
+
+    public IDictionary<string, string> Run(SpiderInfo spiderInfo, IDictionary<string, string> environment, ISpiderHttpClient? httpClient = null)
     {
         // check environment
         ArgumentNullException.ThrowIfNull(environment);
-        if (!spiderInfo.Environment.All(environment.ContainsKey))
+
+        var missingKeys = spiderInfo.Environment?.Except(environment.Keys ?? Enumerable.Empty<string>()).ToList();
+        if (missingKeys?.Count > 0)
         {
-            throw new ArgumentException("Missing environment variables.", nameof(environment));
+            throw new InvalidOperationException($"Missing environment variables: {string.Join(", ", missingKeys)}.");
         }
 
-        // create http client
-        var httpClient = httpClientProvider.Create(spiderInfo.Engine);
+        httpClient ??= CreateClient(spiderInfo);
 
         // run steps
         foreach (var spiderTask in spiderInfo.Task ?? Array.Empty<SpiderTaskInfo>())

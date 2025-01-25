@@ -4,7 +4,8 @@ using SpiderEngine.Model;
 
 public interface ISpider
 {
-    IDictionary<string, string> Run(SpiderInfo spiderInfo, IDictionary<string, string> environment);
+    ISpiderHttpClient CreateClient(SpiderInfo spiderInfo);
+    IDictionary<string, string> Run(SpiderInfo spiderInfo, IDictionary<string, string> environment, ISpiderHttpClient? client = null);
     SpiderInfo Deserialize(string json);
     string Serialize(SpiderInfo spiderInfo);
     string GetSchema();

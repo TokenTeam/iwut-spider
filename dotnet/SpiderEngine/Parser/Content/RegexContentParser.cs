@@ -12,7 +12,7 @@ internal class RegexContentParser : IContentParser
 
     public void Parse(string content, string patten, IEnumerable<SpiderKeyPathPair> value)
     {
-        var match = Regex.Match(content, patten);
+        var match = Regex.Match(content, patten, RegexOptions.Singleline);
         if (!match.Success)
         {
             throw new ParseException("Content does not match the patten.");

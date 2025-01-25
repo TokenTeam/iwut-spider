@@ -2,8 +2,9 @@
     "name": "ias_get_public_key",
     "version": 1,
     "engine": {
-        "cookie": false,
-        "redirect": false
+        "cookie": true,
+        "redirect": true,
+        "delay": 100
     },
     "environment": [],
     "task": [

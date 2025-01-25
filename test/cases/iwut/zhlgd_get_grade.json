@@ -1,0 +1,81 @@
+{
+    "version": 1,
+    "name": "zhlgd_get_grade",
+    "engine": {
+        "cookie": true,
+        "redirect": true,
+        "delay": 100
+    },
+    "task": [
+        {
+            "url": "https://zhlgd.whut.edu.cn/tp_up/up/sysintegration/getGradeList",
+            "method": "post",
+            "name": "get_grade_list",
+            "payload": {
+                "type": "json",
+                "patten": "",
+                "header": [],
+                "value": [
+                    {
+                        "key": "draw",
+                        "value": "1",
+                        "type": "number"
+                    },
+                    {
+                        "key": "length",
+                        "value": "100",
+                        "type": "number"
+                    },
+                    {
+                        "key": "order",
+                        "value": "[]",
+                        "type": "object"
+                    },
+                    {
+                        "key": "pageNum",
+                        "value": "1",
+                        "type": "number"
+                    },
+                    {
+                        "key": "pageSize",
+                        "value": "100",
+                        "type": "number"
+                    },
+                    {
+                        "key": "start",
+                        "value": "0",
+                        "type": "number"
+                    },
+                    {
+                        "key": "appointTime",
+                        "value": "",
+                        "type": "string"
+                    },
+                    {
+                        "key": "dateSearch",
+                        "value": "",
+                        "type": "string"
+                    },
+                    {
+                        "key": "kcmc",
+                        "value": "",
+                        "type": "string"
+                    }
+                ]
+            },           
+            "success": 200,
+            "content": {
+                "type": "json",
+                "patten": "",
+                "value": [
+                    {
+                        "key": "grade_list",
+                        "path": "list"
+                    }
+                ]
+            },
+            "header": null
+        }
+    ],
+    "output": ["grade_list"]
+}

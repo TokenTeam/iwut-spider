@@ -8,15 +8,18 @@ internal class SpiderHttpClient : ISpiderHttpClient
 {
     public SpiderHttpClient(EngineOptions engineOptions)
     {
-        this.client = new HttpClient(new HttpClientHandler
+        this.handler = new HttpClientHandler
         {
             AllowAutoRedirect = engineOptions.Redirect,
             UseCookies = engineOptions.Cookie,
-        });
+        };
+
+        this.client = new HttpClient(handler);
         this.client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0");
     }
 
     private readonly HttpClient client;
+    private readonly HttpClientHandler handler;
 
     public async Task<(string Content, IDictionary<string, string> Headers)> GetAsync(string url, IDictionary<string, string> headers, int success = 200)
     {
