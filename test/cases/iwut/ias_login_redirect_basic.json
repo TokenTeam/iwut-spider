@@ -1,0 +1,110 @@
+{
+    "name": "ias_login_redirect",
+    "version": 1,
+    "engine": {
+        "cookie": true,
+        "redirect": false
+    },
+    "environment": ["ul", "pl", "timestamp"],
+    "task": [
+        {
+            "name": "get_lt",
+            "url": "https://zhlgd.whut.edu.cn/tpass/login",
+            "method": "get",
+            "success": 200,
+            "payload": {
+                "type": "params",
+                "patten": "",
+                "value": [
+                    {
+                        "key": "service",
+                        "value": "https://zhlgd.whut.edu.cn/tp_up/",
+                        "type": "string"
+                    }
+                ],
+                "header": []
+            },
+            "content": {
+                "type": "regex",
+                "patten": "(LT-\\d+-.+?-tpass)",
+                "value": [
+                    {
+                        "key": "lt",
+                        "path": "1"
+                    }
+                ]
+            },
+            "header": [],
+            "delay": 3000
+        },
+        {
+            "name": "ias_login",
+            "url": "https://zhlgd.whut.edu.cn/tpass/login?service=https://zhlgd.whut.edu.cn/tp_up/",
+            "method": "post",
+            "success": 302,
+            "payload": {
+                "type": "form",
+                "patten": "",
+                "value": [
+                    {
+                        "key": "ul",
+                        "value": "$(ul)",
+                        "type": "string"
+                    },
+                    {
+                        "key": "pl",
+                        "value": "$(pl)",
+                        "type": "string"
+                    },
+                    {
+                        "key": "lt",
+                        "value": "$(lt)",
+                        "type": "string"
+                    },
+                    {
+                        "key": "execution",
+                        "value": "e1s1",
+                        "type": "string"
+                    },
+                    {
+                        "key": "_eventId",
+                        "value": "submit",
+                        "type": "string"
+                    }
+                ],
+                "header": []
+            },
+            "content": null,
+            "header": [
+                {
+                    "key": "location_cas",
+                    "path": "Location"
+                }
+            ]
+        },
+        {
+            "name": "ias_redirect",
+            "url": "$(location_cas)",
+            "method": "get",
+            "success": 302,
+            "payload": null,
+            "header": [
+                {
+                    "key": "location_service",
+                    "path": "Location"
+                }
+            ],
+            "content": null
+        },
+        {
+            "name": "service_redirect",
+            "url": "$(location_service)",
+            "method": "get",
+            "success": 302,
+            "payload": null,
+            "header": [],
+            "content": null
+        }
+    ],
+    "output": ["location_service"]
+}
