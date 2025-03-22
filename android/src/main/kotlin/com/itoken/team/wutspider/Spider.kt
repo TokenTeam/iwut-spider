@@ -42,6 +42,9 @@ class Spider(private val httpClientProvider: ISpiderHttpClientProvider) : ISpide
         info.task?.forEachIndexed { index, task ->
             runCatching {
                 runStep(task, context, httpClient)
+                if (task.delay > 0) {
+                    Thread.sleep(task.delay)
+                }
             }.onFailure {
                 throw SpiderException("Failed to execute step [${task.name}], index = $index", it)
             }

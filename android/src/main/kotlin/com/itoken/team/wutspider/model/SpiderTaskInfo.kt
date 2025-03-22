@@ -9,6 +9,7 @@ data class SpiderTaskInfo(
     val url: String,
     val success: Int = 200,
     val method: SpiderMethod = SpiderMethod.GET,
+    val delay: Long = 0,
     val payload: SpiderPayload? = null,
     val content: SpiderParserInfo? = null,
     val header: List<SpiderKeyPathPair>? = null
