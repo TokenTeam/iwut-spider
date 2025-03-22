@@ -9,7 +9,13 @@ interface ISpider {
 
     fun deserialize(info: String): SpiderInfo
 
+    fun createClient(info: SpiderInfo): ISpiderHttpClient
+
     @Throws(SpiderException::class)
-    fun run(info: SpiderInfo, environment: Map<String, String>): Map<String, String>
+    fun run(
+        info: SpiderInfo,
+        environment: Map<String, String>,
+        client: ISpiderHttpClient? = null
+    ): Map<String, String>
 
 }
