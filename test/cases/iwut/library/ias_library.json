@@ -4,6 +4,7 @@
     "engine": {
         "cookie": true,
         "redirect": true,
+        "forceSSL": false,
         "delay": 500
     },
     "environment": ["ul", "pl", "redirect_url"],
@@ -15,11 +16,15 @@
             "success": 200,
             "content": {
                 "type": "regex",
-                "patten": "(LT-\\d+-.+?-tpass)",
+                "patten": "(LT-\\d+-.+?-tpass|e\\d{1}s\\d{1})",
                 "value": [
                     {
                         "key": "lt",
                         "path": "0"
+                    },
+                    {
+                        "key": "execution",
+                        "path": "1"
                     }
                 ]
             },
@@ -52,7 +57,7 @@
                     },
                     {
                         "key": "execution",
-                        "value": "e1s1",
+                        "value": "$(execution)",
                         "type": "string"
                     },
                     {
@@ -133,24 +138,18 @@
                         "type": "string"
                     }
                 ]
-            }
-        },
-        {
-            "name": "zhlgd_home",
-            "url": "https://zhlgd.whut.edu.cn/tp_up/view?m=up",
-            "method": "get",
-            "success": 200,
+            },
             "content": {
                 "type": "regex",
                 "patten": "^.+$",
                 "value": [
                     {
-                        "key": "zhlgd_home",
+                        "key": "lib_home",
                         "path": "0"
                     }
                 ]
             }
         }
     ],
-    "output": ["zhlgd_home"]
+    "output": ["lib_home"]
 }

@@ -1,0 +1,32 @@
+{
+    "name": "ias_get_public_key",
+    "version": 1,
+    "engine": {
+        "cookie": true,
+        "redirect": true,
+        "forceSSL": false,
+        "delay": 100
+    },
+    "environment": [],
+    "task": [
+        {
+            "name": "get_public_key",
+            "url": "https://zhlgd.whut.edu.cn/tpass/rsa?skipWechat=true",
+            "method": "post",
+            "payload": null,
+            "success": 200,
+            "content": {
+                "type": "json",
+                "patten": "",
+                "value": [
+                    {
+                        "key": "pubkey",
+                        "path": "publicKey"
+                    }
+                ]
+            },
+            "header": []
+        }
+    ],
+    "output": ["pubkey"]
+}

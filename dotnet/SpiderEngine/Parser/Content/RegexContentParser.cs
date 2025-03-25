@@ -12,16 +12,26 @@ internal class RegexContentParser : IContentParser
 
     public void Parse(string content, string patten, IEnumerable<SpiderKeyPathPair> value)
     {
-        var match = Regex.Match(content, patten, RegexOptions.Singleline);
-        if (!match.Success)
-        {
-            throw new ParseException("Content does not match the patten.");
-        }
+        Regex.Match(content, patten);
+        var matches = Regex.Matches(content, patten, RegexOptions.Singleline).ToList();
+
         try
         {
+            var dict = matches
+                .Select(
+                    (match, index) =>
+                    {
+                        if (!match.Success)
+                        {
+                            throw new ParseException("Content does not match the patten.");
+                        }
+                        return (index, match.Groups.Values.First());
+                    }
+                )
+                .ToDictionary();
             foreach (var pair in value)
             {
-                Context[pair.Key] = match.Groups[int.Parse(pair.Path)].Value;
+                Context[pair.Key] = dict[int.Parse(pair.Path)].Value;
             }
         }
         catch (AggregateException ex)
