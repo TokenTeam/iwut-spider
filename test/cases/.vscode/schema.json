@@ -11,11 +11,15 @@
         },
         "redirect": {
           "type": "boolean"
+        },
+        "forceSSL": {
+          "type": "boolean"
         }
       },
       "required": [
         "cookie",
-        "redirect"
+        "redirect",
+        "forceSSL"
       ]
     },
     "SpiderKeyPathPair": {

@@ -23,5 +23,16 @@ public class JsonController : ControllerBase
         return Ok(user);
     }
 
+    [HttpPost("redirectTest")]
+    public IActionResult RedirectTest([FromQuery] string redirectUrl)
+    {
+        return Redirect(redirectUrl);
+    }
+
+    [HttpPost("movePermanently")]
+    public IActionResult MovePermanently([FromQuery] string redirectUrl)
+    {
+        return RedirectPermanent(redirectUrl);
+    }
     public record MyUser(string Name, int Age);
 }

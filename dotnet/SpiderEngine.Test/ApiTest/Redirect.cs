@@ -1,6 +1,7 @@
 ﻿namespace SpiderEngine.Test.ApiTest;
 
 using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using SpiderEngine.Abstract;
 using SpiderEngine.Model;
 using SpiderEngine.Service;
@@ -177,5 +178,212 @@ public class Redirect
 
         var nameValue = output["name"];
         Assert.Equal(name, nameValue);
+    }
+
+    [Fact]
+    public void RedirectPost()
+    {
+        var redirectSpiderInfo = new SpiderInfo
+        {
+            Engine = new EngineOptions
+            {
+                Cookie = true,
+                Redirect = true,
+                ForceSSL = false,
+            },
+            Environment = ["baseUrl"],
+            Task = new[]
+            {
+                new SpiderTaskInfo
+                {
+                    Url = "$(baseUrl)",
+                    Method = SpiderMethod.Post,
+                    Success = 200,
+                    Content = new SpiderParserInfo
+                    {
+                        Type = SpiderParserType.Json,
+                        Value = [
+                            new SpiderKeyPathPair
+                            {
+                                Key = "name_0",
+                                Path = "0.name"
+                            },
+                            new SpiderKeyPathPair
+                            {
+                                Key = "age_0",
+                                Path = "0.age"
+                            },
+                            new SpiderKeyPathPair
+                            {
+                                Key = "name_1",
+                                Path = "1.name"
+                            },
+                            new SpiderKeyPathPair
+                            {
+                                Key = "age_1",
+                                Path = "1.age"
+                            },
+                            new SpiderKeyPathPair
+                            {
+                                Key = "name_2",
+                                Path = "2.name"
+                            },
+                            new SpiderKeyPathPair
+                            {
+                                Key = "age_2",
+                                Path = "2.age"
+                            }
+                        ]
+                    }
+                }
+            },
+            Output = ["name_0", "age_0", "name_1", "age_1", "name_2", "age_2"]
+        };
+        var nonRedirectSpiderInfo = new SpiderInfo
+        {
+            Engine = new EngineOptions
+            {
+                Cookie = true,
+                Redirect = false,
+                ForceSSL = false,
+            },
+            Environment = ["baseUrl"],
+            Task = new[]
+            {
+                new SpiderTaskInfo
+                {
+                    Url = "$(baseUrl)",
+                    Method = SpiderMethod.Post,
+                    Success = 302,
+                    Content = null
+                }
+            },
+            Output = []
+        };
+        var json = _spider.Serialize(redirectSpiderInfo);
+        File.WriteAllText("parse_json.json", json);
+
+        var url = $"{Config.ApiBaseUrl}/json/redirectTest?redirectUrl={UrlEncoder.Default.Encode(Config.ApiBaseUrl + "/Json/user")}";
+        var output = _spider.Run(redirectSpiderInfo, new Dictionary<string, string>
+        {
+            { "baseUrl", url }
+        });
+
+        Assert.Equal("Alice", output["name_0"]);
+        Assert.Equal("20", output["age_0"]);
+        Assert.Equal("Bob", output["name_1"]);
+        Assert.Equal("30", output["age_1"]);
+        Assert.Equal("Charlie", output["name_2"]);
+        Assert.Equal("40", output["age_2"]);
+
+        json = _spider.Serialize(nonRedirectSpiderInfo);
+        File.WriteAllText("parse_json.json", json);
+        output = _spider.Run(nonRedirectSpiderInfo, new Dictionary<string, string>
+        {
+            { "baseUrl", url }
+        });
+    }
+
+    [Fact]
+    public void MovePermanentlyPost()
+    {
+        var redirectSpiderInfo = new SpiderInfo
+        {
+            Engine = new EngineOptions
+            {
+                Cookie = true,
+                Redirect = true,
+                ForceSSL = false,
+            },
+            Environment = ["baseUrl"],
+            Task = new[]
+            {
+                new SpiderTaskInfo
+                {
+                    Url = "$(baseUrl)",
+                    Method = SpiderMethod.Post,
+                    Success = 200,
+                    Content = new SpiderParserInfo
+                    {
+                        Type = SpiderParserType.Json,
+                        Value = [
+                            new SpiderKeyPathPair
+                            {
+                                Key = "name_0",
+                                Path = "0.name"
+                            },
+                            new SpiderKeyPathPair
+                            {
+                                Key = "age_0",
+                                Path = "0.age"
+                            },
+                            new SpiderKeyPathPair
+                            {
+                                Key = "name_1",
+                                Path = "1.name"
+                            },
+                            new SpiderKeyPathPair
+                            {
+                                Key = "age_1",
+                                Path = "1.age"
+                            },
+                            new SpiderKeyPathPair
+                            {
+                                Key = "name_2",
+                                Path = "2.name"
+                            },
+                            new SpiderKeyPathPair
+                            {
+                                Key = "age_2",
+                                Path = "2.age"
+                            }
+                        ]
+                    }
+                }
+            },
+            Output = ["name_0", "age_0", "name_1", "age_1", "name_2", "age_2"]
+        };
+        var nonRedirectSpiderInfo = new SpiderInfo
+        {
+            Engine = new EngineOptions
+            {
+                Cookie = true,
+                Redirect = false,
+                ForceSSL = false,
+            },
+            Environment = ["baseUrl"],
+            Task = new[]
+            {
+                new SpiderTaskInfo
+                {
+                    Url = "$(baseUrl)",
+                    Method = SpiderMethod.Post,
+                    Success = 301,
+                    Content = null
+                }
+            },
+            Output = []
+        };
+        var json = _spider.Serialize(redirectSpiderInfo);
+        File.WriteAllText("parse_json.json", json);
+        var url = $"{Config.ApiBaseUrl}/json/movePermanently?redirectUrl={UrlEncoder.Default.Encode(Config.ApiBaseUrl + "/Json/user")}";
+        var output = _spider.Run(redirectSpiderInfo, new Dictionary<string, string>
+        {
+            { "baseUrl", url },
+        });
+
+        Assert.Equal("Alice", output["name_0"]);
+        Assert.Equal("20", output["age_0"]);
+        Assert.Equal("Bob", output["name_1"]);
+        Assert.Equal("30", output["age_1"]);
+        Assert.Equal("Charlie", output["name_2"]);
+        Assert.Equal("40", output["age_2"]);
+
+        json = _spider.Serialize(nonRedirectSpiderInfo);
+        File.WriteAllText("parse_json.json", json);
+        output = _spider.Run(nonRedirectSpiderInfo, new Dictionary<string, string>
+        {
+            { "baseUrl", url },
+        });
     }
 }

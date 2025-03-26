@@ -66,10 +66,11 @@ internal class SpiderHttpClient : ISpiderHttpClient
 
         var response = await this.client.SendAsync(message);
 
-        while(response.StatusCode == System.Net.HttpStatusCode.Redirect)
+        while(handler.AllowAutoRedirect && response.StatusCode == System.Net.HttpStatusCode.Redirect)
         {
             response = await this.client.GetAsync(response.Headers.Location);
         }
+        
         if ((int)response.StatusCode != success)
         {
             throw new HttpRequestException($"Request failed with status code {response.StatusCode}, expected {success}.");

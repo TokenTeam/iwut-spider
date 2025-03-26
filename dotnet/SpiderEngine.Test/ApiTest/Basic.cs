@@ -61,8 +61,7 @@
                 Engine = new EngineOptions
                 {
                     Cookie = true,
-                    Redirect = true,
-                    ForceSSL = true
+                    Redirect = true
                 },
                 Environment = ["baseUrl", "code"],
                 Task = new[]
