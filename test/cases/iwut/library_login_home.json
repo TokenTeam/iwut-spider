@@ -1,0 +1,155 @@
+{
+    "name": "ias_login_home",
+    "version": 1,
+    "engine": {
+        "cookie": true,
+        "redirect": true,
+        "forceSSL": false,
+        "delay": 500
+    },
+    "environment": ["ul", "pl", "redirect_url"],
+    "task": [
+        {
+            "name": "get_lt",
+            "url": "https://zhlgd.whut.edu.cn/tpass/login?service=$(redirect_url)",
+            "method": "get",
+            "success": 200,
+            "content": {
+                "type": "regex",
+                "patten": "(LT-\\d+-.+?-tpass).+?(e\\d{1}s\\d{1})",
+                "value": [
+                    {
+                        "key": "lt",
+                        "path": "1"
+                    },
+                    {
+                        "key": "execution",
+                        "path": "2"
+                    }
+                ]
+            },
+            "header": [],
+            "delay": 3000
+        },
+        {
+            "name": "ias_login",
+            "url": "https://zhlgd.whut.edu.cn/tpass/login?service=$(redirect_url)",
+            "method": "post",
+            "success": 200,
+            "payload": {
+                "type": "form",
+                "patten": "",
+                "value": [
+                    {
+                        "key": "ul",
+                        "value": "$(ul)",
+                        "type": "string"
+                    },
+                    {
+                        "key": "pl",
+                        "value": "$(pl)",
+                        "type": "string"
+                    },
+                    {
+                        "key": "lt",
+                        "value": "$(lt)",
+                        "type": "string"
+                    },
+                    {
+                        "key": "execution",
+                        "value": "$(execution)",
+                        "type": "string"
+                    },
+                    {
+                        "key": "_eventId",
+                        "value": "submit",
+                        "type": "string"
+                    }
+                ],
+                "header": [
+                    {
+                        "key": "Host",
+                        "value": "zhlgd.whut.edu.cn",
+                        "type": "string"
+                    },
+                    {
+                        "key": "Origin",
+                        "value": "https://zhlgd.whut.edu.cn",
+                        "type": "string"
+                    },
+                    {
+                        "key": "Referer",
+                        "value": "https://zhlgd.whut.edu.cn/tpass/login?service=$(redirect_url)",
+                        "type": "string"
+                    },
+                    {
+                        "key": "Sec-Fetch-Dest",
+                        "value": "document",
+                        "type": "string"
+                    },
+                    {
+                        "key": "Sec-Fetch-Mode",
+                        "value": "navigate",
+                        "type": "string"
+                    },
+                    {
+                        "key": "Sec-Fetch-Site",
+                        "value": "same-origin",
+                        "type": "string"
+                    },
+                    {
+                        "key": "Sec-Fetch-User",
+                        "value": "?1",
+                        "type": "string"
+                    },
+                    {
+                        "key": "Upgrade-Insecure-Requests",
+                        "value": "1",
+                        "type": "string"
+                    },
+                    {
+                        "key": "sec-ch-ua",
+                        "value": "\"Not A(Brand\";v=\"8\", \"Chromium\";v=\"132\", \"Microsoft Edge\";v=\"132\"",
+                        "type": "string"
+                    },
+                    {
+                        "key": "sec-ch-ua-mobile",
+                        "value": "?0",
+                        "type": "string"
+                    },
+                    {
+                        "key": "sec-ch-ua-platform",
+                        "value": "\"Windows\"",
+                        "type": "string"
+                    },
+                    {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+                        "type": "string"
+                    },
+                    {
+                        "key": "Accept-Encoding",
+                        "value": "gzip, deflate, bar, zstd",
+                        "type": "string"
+                    },
+                    {
+                        "key": "Cache-Control",
+                        "value": "max-age=0",
+                        "type": "string"
+                    }
+                ]
+            },
+            "content": {
+                "type": "regex",
+                "patten": "^.+$",
+                "value": [
+                    {
+                        "key": "lib_home",
+                        "path": "0"
+                    }
+                ]
+            }
+        }
+    ],
+    "output": ["lib_home"]
+}
