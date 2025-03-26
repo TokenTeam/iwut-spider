@@ -12,6 +12,9 @@ internal class SpiderHttpClient : ISpiderHttpClient
         {
             AllowAutoRedirect = engineOptions.Redirect,
             UseCookies = engineOptions.Cookie,
+            ServerCertificateCustomValidationCallback = engineOptions.ForceSSL
+                ? (message, cert, chain, errors) => true // ignore SSL Check
+                : HttpClientHandler.DangerousAcceptAnyServerCertificateValidator,
         };
 
         this.client = new HttpClient(handler);
@@ -63,6 +66,11 @@ internal class SpiderHttpClient : ISpiderHttpClient
 
         var response = await this.client.SendAsync(message);
 
+        while(handler.AllowAutoRedirect && response.StatusCode == System.Net.HttpStatusCode.Redirect)
+        {
+            response = await this.client.GetAsync(response.Headers.Location);
+        }
+        
         if ((int)response.StatusCode != success)
         {
             throw new HttpRequestException($"Request failed with status code {response.StatusCode}, expected {success}.");

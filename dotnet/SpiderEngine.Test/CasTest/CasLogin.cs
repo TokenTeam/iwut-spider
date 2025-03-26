@@ -72,4 +72,31 @@ public class CasLogin
         var grades = JsonSerializer.Deserialize<ZhlgdGrade[]>(output3["grade_list"]);
         Assert.NotEmpty(grades!);
     }
+
+    [Fact]
+    public void LoginAndGetLibraryInfo()
+    {
+        var env = new Dictionary<string, string>();
+        var spiderGetPubkey = _spider.ReadCaseFromFile(Config.CasCasePath("ias_get_public_key"));
+        var client = _spider.CreateClient(spiderGetPubkey);
+        var output1 = _spider.Run(spiderGetPubkey, env, client);
+        var pubkey = output1["pubkey"];
+
+        Assert.NotEmpty(pubkey);
+
+        var rsa = RSA.Create();
+        rsa.ImportSubjectPublicKeyInfo(Convert.FromBase64String(pubkey), out _);
+
+        var ul = Convert.ToBase64String(rsa.Encrypt(Encoding.UTF8.GetBytes(Config.UserName), RSAEncryptionPadding.Pkcs1));
+        var pl = Convert.ToBase64String(rsa.Encrypt(Encoding.UTF8.GetBytes(Config.Password), RSAEncryptionPadding.Pkcs1));
+
+        var spiderLogin = _spider.ReadCaseFromFile(Config.CasCasePath("library_login_home"));
+
+        env["ul"] = ul;
+        env["pl"] = pl;
+        env["redirect_url"] = UrlEncoder.Default.Encode("http://202.114.89.11/opac/special/toOpac");
+        var output2 = _spider.Run(spiderLogin, env, client);
+        Assert.NotNull(output2["lib_home"]);
+        Assert.NotEmpty(output2["lib_home"]);
+    }
 }

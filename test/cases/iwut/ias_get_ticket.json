@@ -3,7 +3,9 @@
     "version": 1,
     "engine": {
         "cookie": true,
-        "redirect": false
+        "redirect": false,
+        "forceSSL": true
+
     },
     "environment": ["ul", "pl"],
     "task": [

@@ -3,7 +3,8 @@
     "version": 1,
     "engine": {
         "cookie": false,
-        "redirect": false
+        "redirect": false,
+        "forceSSL": true
     },
     "environment": ["pubkey", "user", "pwd"],
     "task": [
