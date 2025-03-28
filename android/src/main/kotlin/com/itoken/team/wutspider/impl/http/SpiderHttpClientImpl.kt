@@ -18,8 +18,14 @@ import javax.net.ssl.X509TrustManager
 
 class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
 
+    companion object {
+
+        val RedirectHttpCodes = setOf(301, 302)
+
+    }
+
     private val client = OkHttpClient.Builder()
-        .followRedirects(options.redirect)
+        .followRedirects(false)
         .also {
             if (options.cookie) {
                 it.cookieJar(InMemoryCookieJar())
@@ -65,10 +71,23 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
         }
     }
 
+    private fun makeRequestWithAutoRedirect(request: Request, success: Int, autoRedirect: Boolean) : ISpiderHttpClient.HttpClientResponse {
+        var resp = makeRequest(request, success)
+        while (autoRedirect && RedirectHttpCodes.contains(resp.statusCode)
+            && resp.headers.containsKey(
+                "Location"
+            )
+        ) {
+            resp = get(resp.headers["Location"]!!, mapOf())
+        }
+        return resp
+    }
+
     override fun get(
         url: String,
         headers: Map<String, String>,
-        success: Int
+        success: Int,
+        autoRedirect: Boolean
     ): ISpiderHttpClient.HttpClientResponse {
         val request = Request.Builder()
             .url(url)
@@ -78,7 +97,7 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
                 headers.forEach { (key, value) -> it.addHeader(key, value) }
             }
             .build()
-        return makeRequest(request, success)
+        return makeRequestWithAutoRedirect(request, success, autoRedirect)
     }
 
     override fun post(
@@ -86,7 +105,8 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
         headers: Map<String, String>,
         payload: String,
         payloadType: SpiderPayloadType,
-        success: Int
+        success: Int,
+        autoRedirect: Boolean
     ): ISpiderHttpClient.HttpClientResponse {
         val mediaType = when (payloadType) {
             SpiderPayloadType.JSON -> "application/json".toMediaTypeOrNull()
@@ -101,15 +121,7 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
                 headers.forEach { (key, value) -> it.addHeader(key, value) }
             }
             .build()
-        var resp = makeRequest(request, success)
-        while (client.followRedirects && resp.statusCode == 302 /* Http Redirect */
-            && resp.headers.containsKey(
-                "Location"
-            )
-        ) {
-            resp = get(resp.headers["Location"]!!, mapOf())
-        }
-        return resp
+        return makeRequestWithAutoRedirect(request, success, autoRedirect)
     }
 
     private fun OkHttpClient.Builder.ignoreSSL() {

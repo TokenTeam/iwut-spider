@@ -12,7 +12,8 @@ data class SpiderTaskInfo(
     val delay: Long = 0,
     val payload: SpiderPayload? = null,
     val content: SpiderParserInfo? = null,
-    val header: List<SpiderKeyPathPair>? = null
+    val header: List<SpiderKeyPathPair>? = null,
+    val redirect: Boolean = true,
 )
 
 enum class SpiderMethod {

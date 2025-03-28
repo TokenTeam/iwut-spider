@@ -88,6 +88,7 @@ class Spider(private val httpClientProvider: ISpiderHttpClientProvider) :
 
         // Send request
         val successCode = if (task.success == 0) 200 else task.success
+        val autoRedirect = task.redirect
         val reqHeaders = mutableMapOf<String, String>()
         task.payload?.header?.forEach {
             reqHeaders[it.key] = it.value.fillVariables(context)
@@ -95,9 +96,9 @@ class Spider(private val httpClientProvider: ISpiderHttpClientProvider) :
 
         val res = if (task.method == SpiderMethod.GET) {
             if (payload.isNotBlank()) {
-                client.get("$url?${payload}", reqHeaders, successCode)
+                client.get("$url?${payload}", reqHeaders, successCode, autoRedirect)
             } else {
-                client.get(url, reqHeaders, successCode)
+                client.get(url, reqHeaders, successCode, autoRedirect)
             }
         } else {
             client.post(
@@ -105,7 +106,8 @@ class Spider(private val httpClientProvider: ISpiderHttpClientProvider) :
                 reqHeaders,
                 payload,
                 task.payload?.type ?: SpiderPayloadType.TEXT,
-                successCode
+                successCode,
+                autoRedirect
             )
         }
 

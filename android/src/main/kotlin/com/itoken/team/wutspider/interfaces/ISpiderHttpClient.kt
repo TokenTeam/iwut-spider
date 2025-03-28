@@ -5,14 +5,19 @@ import com.itoken.team.wutspider.model.SpiderPayloadType
 
 interface ISpiderHttpClient {
 
-    fun get(url: String, headers: Map<String, String>, success: Int = 200): HttpClientResponse
+    fun get(
+        url: String, headers: Map<String, String>,
+        success: Int = 200,
+        autoRedirect: Boolean = false
+    ): HttpClientResponse
 
     fun post(
         url: String,
         headers: Map<String, String>,
         payload: String,
         payloadType: SpiderPayloadType,
-        success: Int = 200
+        success: Int = 200,
+        autoRedirect: Boolean = false
     ): HttpClientResponse
 
     data class HttpClientResponse(
