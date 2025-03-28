@@ -21,7 +21,6 @@ public class Header
             Engine = new EngineOptions
             {
                 Cookie = true,
-                Redirect = true
             },
             Environment = ["baseUrl"],
             Task = new[]
@@ -72,7 +71,6 @@ public class Header
             Engine = new EngineOptions
             {
                 Cookie = true,
-                Redirect = true
             },
             Environment = ["baseUrl"],
             Task = new[]

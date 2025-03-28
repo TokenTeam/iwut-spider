@@ -8,8 +8,8 @@
         public static readonly string ApiBaseUrl = "http://localhost:5000/api";
         public static readonly string CasCasesDir = "../../../../../test/cases/iwut";
 
-        public static readonly string UserName = "*************";
-        public static readonly string Password = "*********";
+        public static readonly string UserName = "0122210880523";
+        public static readonly string Password = "a12345678";
 
         public static string CasCasePath(string name)
         {

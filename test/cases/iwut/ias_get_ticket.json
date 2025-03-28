@@ -3,7 +3,6 @@
     "version": 1,
     "engine": {
         "cookie": true,
-        "redirect": false,
         "forceSSL": true
 
     },
@@ -14,6 +13,7 @@
             "url": "https://zhlgd.whut.edu.cn/tpass/login",
             "method": "get",
             "success": 200,
+            "redirect": false,
             "payload": {
                 "type": "params",
                 "patten": "",
@@ -43,6 +43,7 @@
             "url": "https://zhlgd.whut.edu.cn/tpass/login?service=https://zhlgd.whut.edu.cn/tp_up/../tp",
             "method": "post",
             "success": 302,
+            "redirect": false,
             "payload": {
                 "type": "params",
                 "patten": "",

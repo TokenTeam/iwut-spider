@@ -10,9 +10,9 @@ internal class SpiderHttpClient : ISpiderHttpClient
     {
         this.handler = new HttpClientHandler
         {
-            AllowAutoRedirect = engineOptions.Redirect,
+            AllowAutoRedirect = false,
             UseCookies = engineOptions.Cookie,
-            ServerCertificateCustomValidationCallback = engineOptions.ForceSSL
+            ServerCertificateCustomValidationCallback = engineOptions.ForceSSL ?? true
                 ? (message, cert, chain, errors) => true // ignore SSL Check
                 : HttpClientHandler.DangerousAcceptAnyServerCertificateValidator,
         };
@@ -24,7 +24,7 @@ internal class SpiderHttpClient : ISpiderHttpClient
     private readonly HttpClient client;
     private readonly HttpClientHandler handler;
 
-    public async Task<(string Content, IDictionary<string, string> Headers)> GetAsync(string url, IDictionary<string, string> headers, int success = 200)
+    public async Task<(string Content, IDictionary<string, string> Headers)> GetAsync(string url, IDictionary<string, string> headers, int success = 200, bool redirect = true)
     {
         var message = new HttpRequestMessage(HttpMethod.Get, url);
         foreach (var header in headers)
@@ -33,6 +33,12 @@ internal class SpiderHttpClient : ISpiderHttpClient
         }
 
         var response = await this.client.SendAsync(message);
+
+        while (redirect && response.StatusCode is System.Net.HttpStatusCode.MovedPermanently or System.Net.HttpStatusCode.Redirect)
+        {
+            response = await this.client.GetAsync(response.Headers.Location);
+        }
+
         if ((int)response.StatusCode != success)
         {
             throw new HttpRequestException($"Request failed with status code {response.StatusCode}, expected {success}.");
@@ -43,7 +49,7 @@ internal class SpiderHttpClient : ISpiderHttpClient
         return (respContent, respHeaders);
     }
 
-    public async Task<(string Content, IDictionary<string, string> Headers)> PostAsync(string url, IDictionary<string, string> headers, string payload, SpiderPayloadType type, int success = 200)
+    public async Task<(string Content, IDictionary<string, string> Headers)> PostAsync(string url, IDictionary<string, string> headers, string payload, SpiderPayloadType type, int success = 200, bool redirect = true)
     {
         var contentType = type switch
         {
@@ -66,7 +72,7 @@ internal class SpiderHttpClient : ISpiderHttpClient
 
         var response = await this.client.SendAsync(message);
 
-        while(handler.AllowAutoRedirect && response.StatusCode == System.Net.HttpStatusCode.Redirect)
+        while(redirect && response.StatusCode is System.Net.HttpStatusCode.MovedPermanently or System.Net.HttpStatusCode.Redirect)
         {
             response = await this.client.GetAsync(response.Headers.Location);
         }

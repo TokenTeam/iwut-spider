@@ -3,7 +3,6 @@
     "version": 1,
     "engine": {
         "cookie": true,
-        "redirect": true,
         "delay": 100
     },
     "environment": [],

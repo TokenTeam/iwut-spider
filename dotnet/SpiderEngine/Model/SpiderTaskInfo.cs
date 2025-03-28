@@ -5,6 +5,7 @@ public class SpiderTaskInfo
     public string Name { get; set; } = default!;
     public string Url { get; set; } = default!;
     public int? Success { get; set; }
+    public bool? Redirect { get; set; }
     public int Delay { get; set; }
     public SpiderMethod Method { get; set; } = default!;
     public SpiderPayload? Payload { get; set; } = default!;

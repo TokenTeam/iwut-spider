@@ -1,0 +1,43 @@
+{
+    "name": "LGZK_class_info",
+    "version": 1,
+    "engine": {
+        "cookie": true,
+        "forceSSL": true,
+        "delay": 500
+    },
+    "environment": ["course_id", "sub_id", "token"],
+    "task": [
+        {
+            "name": "get_class_info",
+            "url": "https://yjapi.lgzk.whut.edu.cn/courseapi/v2/course-live/search-live-course-list?all=1&course_id=$(course_id)&sub_id=$(sub_id)",
+            "method": "get",
+            "success": 200,
+            "redirect": false,
+            "payload": {
+                "type": "params",
+                "patten": "",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer $(token)",
+                        "type": "string"
+                    }
+                ]
+            },
+            "content": {
+                "type": "json",
+                "patten": "",
+                "value": [
+                    {
+                        "key": "class",
+                        "path": "list.0"
+                    }
+                ]
+            },
+            "header": [],
+            "delay": 3000
+        }
+    ],
+    "output": ["class"]
+}

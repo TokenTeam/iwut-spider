@@ -25,7 +25,6 @@ public class Redirect
             Engine = new EngineOptions
             {
                 Cookie = true,
-                Redirect = true
             },
             Environment = ["baseUrl", "redirectUrl"],
             Task = new[]
@@ -85,7 +84,6 @@ public class Redirect
             Engine = new EngineOptions
             {
                 Cookie = true,
-                Redirect = false
             },
             Environment = ["baseUrl", "redirectUrl"],
             Task = new[]
@@ -94,6 +92,7 @@ public class Redirect
                 {
                     Url = "$(baseUrl)/basic/301",
                     Method = SpiderMethod.Get,
+                    Redirect = false,
                     Success = 302,
                     Payload = new SpiderPayload
                     {
@@ -142,7 +141,6 @@ public class Redirect
             Engine = new EngineOptions
             {
                 Cookie = true,
-                Redirect = true
             },
             Environment = ["baseUrl", "redirectUrl"],
             Task = new[]
@@ -188,7 +186,6 @@ public class Redirect
             Engine = new EngineOptions
             {
                 Cookie = true,
-                Redirect = true,
                 ForceSSL = false,
             },
             Environment = ["baseUrl"],
@@ -244,7 +241,6 @@ public class Redirect
             Engine = new EngineOptions
             {
                 Cookie = true,
-                Redirect = false,
                 ForceSSL = false,
             },
             Environment = ["baseUrl"],
@@ -255,7 +251,8 @@ public class Redirect
                     Url = "$(baseUrl)",
                     Method = SpiderMethod.Post,
                     Success = 302,
-                    Content = null
+                    Content = null,
+                    Redirect = false
                 }
             },
             Output = []
@@ -292,7 +289,6 @@ public class Redirect
             Engine = new EngineOptions
             {
                 Cookie = true,
-                Redirect = true,
                 ForceSSL = false,
             },
             Environment = ["baseUrl"],
@@ -348,7 +344,6 @@ public class Redirect
             Engine = new EngineOptions
             {
                 Cookie = true,
-                Redirect = false,
                 ForceSSL = false,
             },
             Environment = ["baseUrl"],
@@ -359,7 +354,8 @@ public class Redirect
                     Url = "$(baseUrl)",
                     Method = SpiderMethod.Post,
                     Success = 301,
-                    Content = null
+                    Content = null,
+                    Redirect = false,
                 }
             },
             Output = []

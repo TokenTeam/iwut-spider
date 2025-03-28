@@ -1,17 +1,18 @@
 {
-    "name": "library_login_home",
+    "name": "LGZK_login_home",
     "version": 1,
     "engine": {
         "cookie": true,
         "forceSSL": true,
         "delay": 500
     },
-    "environment": ["ul", "pl", "redirect_url"],
+    "environment": ["ul", "pl", "redirect_url", "redirect_url_login", "date"],
     "task": [
         {
             "name": "get_lt",
             "url": "https://zhlgd.whut.edu.cn/tpass/login?service=$(redirect_url)",
             "method": "get",
+            "redirect": false,
             "success": 200,
             "content": {
                 "type": "regex",
@@ -32,13 +33,19 @@
         },
         {
             "name": "ias_login",
-            "url": "https://zhlgd.whut.edu.cn/tpass/login?service=$(redirect_url)",
+            "url": "https://zhlgd.whut.edu.cn/tpass/login?service=$(redirect_url_login)",
             "method": "post",
-            "success": 200,
+            "redirect": false,
+            "success": 302,
             "payload": {
                 "type": "form",
                 "patten": "",
                 "value": [
+                    {
+                        "key": "rsa",
+                        "value": "",
+                        "type": "string"
+                    },
                     {
                         "key": "ul",
                         "value": "$(ul)",
@@ -138,17 +145,75 @@
                     }
                 ]
             },
-            "content": {
-                "type": "regex",
-                "patten": "^.+$",
+            "content": null,
+            "header":[
+                {
+                    "key": "Location",
+                    "path": "Location"
+                }
+            ]
+        },
+        {
+            "name": "redirect1",
+            "url": "$(Location)",
+            "method": "get",
+            "redirect": false,
+            "success": 302,
+            "content": null,
+            "header":[
+                {
+                    "key": "Location",
+                    "path": "Location"
+                }
+            ]
+        },
+        {
+            "name": "redirect2",
+            "url": "$(Location)",
+            "method": "get",
+            "redirect": false,
+            "success": 302,
+            "content": null,
+            "header": [
+                {
+                    "key": "cookies",
+                    "path": "Set-Cookie"
+                }
+            ]
+        },
+        {
+            "name": "get_class",
+            "url": "https://yjapi.lgzk.whut.edu.cn/courseapi/v2/schedule/get-week-schedules",
+            "method": "get",
+            "redirect": false,
+            "success": 200,
+            "payload": {
+                "type": "params",
+                "patten": "",
                 "value": [
                     {
-                        "key": "lib_home",
-                        "path": "0"
+                        "key": "start_at",
+                        "value": "$(date)",
+                        "type": "string"
+                    },
+                    {
+                        "key": "end_at",
+                        "value": "$(date)",
+                        "type": "string"
+                    }
+                ]
+            },
+            "content": {
+                "type": "json",
+                "patten": "",
+                "value": [
+                    {
+                        "key": "list",
+                        "path": "result.list.0.course"
                     }
                 ]
             }
         }
     ],
-    "output": ["lib_home"]
+    "output": ["list", "cookies"]
 }

@@ -21,7 +21,6 @@ public class Post
             Engine = new EngineOptions
             {
                 Cookie = true,
-                Redirect = true
             },
             Environment = ["baseUrl"],
             Task = new[]
@@ -86,7 +85,6 @@ public class Post
             Engine = new EngineOptions
             {
                 Cookie = true,
-                Redirect = true
             },
             Environment = ["baseUrl"],
             Task = new[]
@@ -154,7 +152,6 @@ public class Post
             Engine = new EngineOptions
             {
                 Cookie = true,
-                Redirect = true
             },
             Environment = ["baseUrl"],
             Task = new[]
