@@ -8,7 +8,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.internal.http.HttpMethod
 import java.security.KeyStore
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
