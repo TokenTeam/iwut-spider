@@ -3,7 +3,6 @@
     "name": "zhlgd_get_grade",
     "engine": {
         "cookie": true,
-        "redirect": true,
         "delay": 100
     },
     "task": [

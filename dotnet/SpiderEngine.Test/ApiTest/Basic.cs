@@ -29,7 +29,6 @@
                 Engine = new EngineOptions
                 {
                     Cookie = true,
-                    Redirect = true
                 },
                 Environment = ["a", "b", "c"],
                 Output = ["a", "b", "c"],
@@ -61,7 +60,6 @@
                 Engine = new EngineOptions
                 {
                     Cookie = true,
-                    Redirect = true
                 },
                 Environment = ["baseUrl", "code"],
                 Task = new[]
@@ -96,7 +94,6 @@
                 Engine = new EngineOptions
                 {
                     Cookie = true,
-                    Redirect = true
                 },
                 Environment = ["baseUrl", "name"],
                 Task = new[]

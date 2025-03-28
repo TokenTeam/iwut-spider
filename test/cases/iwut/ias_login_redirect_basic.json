@@ -2,8 +2,7 @@
     "name": "ias_login_redirect",
     "version": 1,
     "engine": {
-        "cookie": true,
-        "redirect": false
+        "cookie": true
     },
     "environment": ["ul", "pl", "timestamp"],
     "task": [
@@ -12,6 +11,7 @@
             "url": "https://zhlgd.whut.edu.cn/tpass/login",
             "method": "get",
             "success": 200,
+            "redirect": false,
             "payload": {
                 "type": "params",
                 "patten": "",
@@ -42,6 +42,7 @@
             "url": "https://zhlgd.whut.edu.cn/tpass/login?service=https://zhlgd.whut.edu.cn/tp_up/",
             "method": "post",
             "success": 302,
+            "redirect": false,
             "payload": {
                 "type": "form",
                 "patten": "",
@@ -87,6 +88,7 @@
             "url": "$(location_cas)",
             "method": "get",
             "success": 302,
+            "redirect": false,
             "payload": null,
             "header": [
                 {
@@ -101,6 +103,8 @@
             "url": "$(location_service)",
             "method": "get",
             "success": 302,
+            "redirect": false,
+
             "payload": null,
             "header": [],
             "content": null

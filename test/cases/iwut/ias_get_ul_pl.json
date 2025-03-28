@@ -3,7 +3,6 @@
     "version": 1,
     "engine": {
         "cookie": false,
-        "redirect": false,
         "forceSSL": true
     },
     "environment": ["pubkey", "user", "pwd"],
@@ -13,6 +12,7 @@
             "url": "http://localhost:5000/ias/get_ul_pl",
             "success": 200,
             "method": "post",
+            "redirect": false,
             "payload": {
                 "type": "form",
                 "patten": "",

@@ -118,11 +118,11 @@ internal class Spider : ISpider
         if (spiderTask.Method == SpiderMethod.Get)
         {
             var url = spiderTask.Url + (string.IsNullOrEmpty(payload) ? string.Empty : $"?{payload}");
-            (respContent, respHeaders) = await httpClient.GetAsync(url.FillVariables(environment), requestHeaders, successCode);
+            (respContent, respHeaders) = await httpClient.GetAsync(url.FillVariables(environment), requestHeaders, successCode, spiderTask.Redirect ?? true);
         }
         else
         {
-            (respContent, respHeaders) = await httpClient.PostAsync(spiderTask.Url.FillVariables(environment), requestHeaders, payload, payloadInfo?.Type ?? SpiderPayloadType.Text, successCode);
+            (respContent, respHeaders) = await httpClient.PostAsync(spiderTask.Url.FillVariables(environment), requestHeaders, payload, payloadInfo?.Type ?? SpiderPayloadType.Text, successCode, spiderTask.Redirect ?? true);
         }
 
         // parse content
