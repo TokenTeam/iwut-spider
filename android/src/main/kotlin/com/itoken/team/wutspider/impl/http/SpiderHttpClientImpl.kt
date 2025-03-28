@@ -8,6 +8,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.internal.http.HttpMethod
 import java.security.KeyStore
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
@@ -44,10 +45,18 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
 
     private fun makeRequest(
         request: Request,
-        success: Int
+        success: Int,
+        allowRedirect: Boolean,
     ): ISpiderHttpClient.HttpClientResponse {
         return runCatching {
-            client.newCall(request).execute()
+            var resp = client.newCall(request).execute()
+            while (allowRedirect) {
+                val newRequest = RedirectHandling.followUpRequest(resp)
+                if (newRequest != null) {
+                    resp = client.newCall(request).execute()
+                }
+            }
+            resp
         }.map { resp ->
             resp.use { response ->
                 if (response.code != success) {
@@ -71,18 +80,6 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
         }
     }
 
-    private fun makeRequestWithAutoRedirect(request: Request, success: Int, autoRedirect: Boolean) : ISpiderHttpClient.HttpClientResponse {
-        var resp = makeRequest(request, success)
-        while (autoRedirect && RedirectHttpCodes.contains(resp.statusCode)
-            && resp.headers.containsKey(
-                "Location"
-            )
-        ) {
-            resp = get(resp.headers["Location"]!!, mapOf())
-        }
-        return resp
-    }
-
     override fun get(
         url: String,
         headers: Map<String, String>,
@@ -97,7 +94,7 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
                 headers.forEach { (key, value) -> it.addHeader(key, value) }
             }
             .build()
-        return makeRequestWithAutoRedirect(request, success, autoRedirect)
+        return makeRequest(request, success, autoRedirect)
     }
 
     override fun post(
@@ -121,7 +118,7 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
                 headers.forEach { (key, value) -> it.addHeader(key, value) }
             }
             .build()
-        return makeRequestWithAutoRedirect(request, success, autoRedirect)
+        return makeRequest(request, success, autoRedirect)
     }
 
     private fun OkHttpClient.Builder.ignoreSSL() {
