@@ -8,6 +8,12 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.security.KeyStore
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManagerFactory
+import javax.net.ssl.X509TrustManager
 
 
 class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
@@ -18,6 +24,9 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
             if (options.cookie) {
                 it.cookieJar(InMemoryCookieJar())
             }
+            if (options.forceSSL) {
+                it.ignoreSSL()
+            }
         }.build()
 
     private fun Request.Builder.applySpiderDefaults(): Request.Builder {
@@ -27,7 +36,10 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
         )
     }
 
-    private fun makeRequest(request: Request, success: Int): ISpiderHttpClient.HttpClientResponse {
+    private fun makeRequest(
+        request: Request,
+        success: Int
+    ): ISpiderHttpClient.HttpClientResponse {
         return runCatching {
             client.newCall(request).execute()
         }.map {
@@ -37,10 +49,16 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
                 }
                 val content = response.body?.string() ?: ""
                 val headerNames = response.headers.names()
-                val headerValues = headerNames.map { response.headers.values(it).joinToString(";") }
+                val headerValues = headerNames.map {
+                    response.headers.values(it).joinToString(";")
+                }
                 val zipped = headerNames.zip(headerValues).toTypedArray()
                 val headers = mapOf(*zipped)
-                ISpiderHttpClient.HttpClientResponse(response.code, headers, content)
+                ISpiderHttpClient.HttpClientResponse(
+                    response.code,
+                    headers,
+                    content
+                )
             }
         }.getOrElse {
             throw SpiderException("Failed to request url ${request.url}", it)
@@ -86,5 +104,38 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
         return makeRequest(request, success)
     }
 
+    private fun OkHttpClient.Builder.ignoreSSL() {
+        val sslContext = SSLContext.getInstance("SSL")
+        val trustManager = object : X509TrustManager {
+            override fun checkClientTrusted(
+                chain: Array<out X509Certificate>?,
+                authType: String?
+            ) {
+            }
+
+            override fun checkServerTrusted(
+                chain: Array<out X509Certificate>?,
+                authType: String?
+            ) {
+            }
+
+            override fun getAcceptedIssuers() = emptyArray<X509Certificate>()
+        }
+        sslContext.init(
+            null, arrayOf(trustManager), SecureRandom())
+        hostnameVerifier { _, _ -> true }
+        sslSocketFactory(sslContext.socketFactory, platformTrustManager())
+    }
+
+    private fun platformTrustManager(): X509TrustManager {
+        val factory = TrustManagerFactory.getInstance(
+            TrustManagerFactory.getDefaultAlgorithm())
+        factory.init(null as KeyStore?)
+        val trustManagers = factory.trustManagers!!
+        check(trustManagers.size == 1 && trustManagers[0] is X509TrustManager) {
+            "Unexpected default trust managers: ${trustManagers.contentToString()}"
+        }
+        return trustManagers[0] as X509TrustManager
+    }
 
 }
