@@ -42,8 +42,8 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
     ): ISpiderHttpClient.HttpClientResponse {
         return runCatching {
             client.newCall(request).execute()
-        }.map {
-            it.use { response ->
+        }.map { resp ->
+            resp.use { response ->
                 if (response.code != success) {
                     throw SpiderException("Unexpected status code while requesting ${request.url}. actual: ${response.code}, expected: $success")
                 }
@@ -101,7 +101,15 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
                 headers.forEach { (key, value) -> it.addHeader(key, value) }
             }
             .build()
-        return makeRequest(request, success)
+        var resp = makeRequest(request, success)
+        while (client.followRedirects && resp.statusCode == 302 /* Http Redirect */
+            && resp.headers.containsKey(
+                "Location"
+            )
+        ) {
+            resp = get(resp.headers["Location"]!!, mapOf())
+        }
+        return resp
     }
 
     private fun OkHttpClient.Builder.ignoreSSL() {
@@ -122,14 +130,16 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
             override fun getAcceptedIssuers() = emptyArray<X509Certificate>()
         }
         sslContext.init(
-            null, arrayOf(trustManager), SecureRandom())
+            null, arrayOf(trustManager), SecureRandom()
+        )
         hostnameVerifier { _, _ -> true }
         sslSocketFactory(sslContext.socketFactory, platformTrustManager())
     }
 
     private fun platformTrustManager(): X509TrustManager {
         val factory = TrustManagerFactory.getInstance(
-            TrustManagerFactory.getDefaultAlgorithm())
+            TrustManagerFactory.getDefaultAlgorithm()
+        )
         factory.init(null as KeyStore?)
         val trustManagers = factory.trustManagers!!
         check(trustManagers.size == 1 && trustManagers[0] is X509TrustManager) {
