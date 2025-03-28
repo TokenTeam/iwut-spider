@@ -18,11 +18,6 @@ import javax.net.ssl.X509TrustManager
 
 class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
 
-    companion object {
-
-        val RedirectHttpCodes = setOf(301, 302)
-
-    }
 
     private val client = OkHttpClient.Builder()
         .followRedirects(false)
@@ -53,6 +48,8 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
                 val newRequest = RedirectHandling.followUpRequest(resp)
                 if (newRequest != null) {
                     resp = client.newCall(request).execute()
+                } else {
+                    break
                 }
             }
             resp
