@@ -140,10 +140,10 @@ class Spider(private val httpClientProvider: ISpiderHttpClientProvider) :
 
         // Save headers
         task.header?.forEach {
-            if (!res.headers.containsKey(it.path)) {
+            if (!res.headers.containsKey(it.path.lowercase())) {
                 throw SpiderException("Missing header: ${it.path}")
             }
-            context[it.key] = res.headers[it.path] ?: ""
+            context[it.key] = res.headers[it.path.lowercase()] ?: ""
         }
     }
 
