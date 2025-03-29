@@ -13,6 +13,8 @@ import kotlinx.serialization.json.JsonNamingStrategy
 class Spider(private val httpClientProvider: ISpiderHttpClientProvider) :
     ISpider {
 
+    private var defaultDelay: Long = 0
+
     @OptIn(ExperimentalSerializationApi::class)
     private val json = Json {
         prettyPrint = true
@@ -41,6 +43,7 @@ class Spider(private val httpClientProvider: ISpiderHttpClientProvider) :
         environment: Map<String, String>,
         client: ISpiderHttpClient?
     ): Map<String, String> {
+        defaultDelay = info.engine.delay
         val context = environment.toMutableMap()
         if (info.environment != null && !environment.keys.containsAll(info.environment)) {
             val missingKeys = info.environment.filter { !environment.contains(it) }.toList()
@@ -51,8 +54,12 @@ class Spider(private val httpClientProvider: ISpiderHttpClientProvider) :
         info.task?.forEachIndexed { index, task ->
             runCatching {
                 runStep(task, context, httpClient)
+                var delay = task.delay
+                if (delay <= 0) {
+                    delay = defaultDelay
+                }
                 if (task.delay > 0) {
-                    Thread.sleep(task.delay)
+                    Thread.sleep(delay)
                 }
             }.onFailure {
                 throw SpiderException(
