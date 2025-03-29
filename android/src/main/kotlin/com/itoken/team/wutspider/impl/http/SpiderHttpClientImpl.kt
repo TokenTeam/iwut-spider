@@ -63,7 +63,7 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
                 val headerValues = headerNames.map {
                     response.headers.values(it).joinToString(";")
                 }
-                val zipped = headerNames.zip(headerValues).toTypedArray()
+                val zipped = headerNames.map { it.lowercase() }.zip(headerValues).toTypedArray()
                 val headers = mapOf(*zipped)
                 ISpiderHttpClient.HttpClientResponse(
                     response.code,
