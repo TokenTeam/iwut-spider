@@ -21,7 +21,7 @@ class Spider(private val httpClientProvider: ISpiderHttpClientProvider) :
         explicitNulls = false
         decodeEnumsCaseInsensitive = true
         encodeDefaults = true
-        // ignoreUnknownKeys = true
+        ignoreUnknownKeys = true
         namingStrategy = JsonNamingStrategy.SnakeCase
     }
 
@@ -46,8 +46,15 @@ class Spider(private val httpClientProvider: ISpiderHttpClientProvider) :
         defaultDelay = info.engine.delay
         val context = environment.toMutableMap()
         if (info.environment != null && !environment.keys.containsAll(info.environment)) {
-            val missingKeys = info.environment.filter { !environment.contains(it) }.toList()
-            throw IllegalArgumentException("Missing environment variables: ${missingKeys.joinToString(", ")}")
+            val missingKeys =
+                info.environment.filter { !environment.contains(it) }.toList()
+            throw IllegalArgumentException(
+                "Missing environment variables: ${
+                    missingKeys.joinToString(
+                        ", "
+                    )
+                }"
+            )
         }
 
         val httpClient = client ?: createClient(info)
@@ -103,7 +110,12 @@ class Spider(private val httpClientProvider: ISpiderHttpClientProvider) :
 
         val res = if (task.method == SpiderMethod.GET) {
             if (payload.isNotBlank()) {
-                client.get("$url?${payload}", reqHeaders, successCode, autoRedirect)
+                client.get(
+                    "$url?${payload}",
+                    reqHeaders,
+                    successCode,
+                    autoRedirect
+                )
             } else {
                 client.get(url, reqHeaders, successCode, autoRedirect)
             }
