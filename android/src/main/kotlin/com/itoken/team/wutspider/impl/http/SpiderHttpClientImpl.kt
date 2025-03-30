@@ -45,9 +45,10 @@ class SpiderHttpClientImpl(options: EngineOptions) : ISpiderHttpClient {
         return runCatching {
             var resp = client.newCall(request).execute()
             while (allowRedirect) {
-                val newRequest = RedirectHandling.followUpRequest(resp)
-                if (newRequest != null) {
-                    resp = client.newCall(request).execute()
+                val codes = setOf(301, 302)
+                if (resp.code in codes) {
+                    val newRequest = Request.Builder().url(resp.headers["Location"]!!).get().build()
+                    resp = client.newCall(newRequest).execute()
                 } else {
                     break
                 }
